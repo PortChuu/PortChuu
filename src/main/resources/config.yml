@@ -1,0 +1,15 @@
+# use § for coloring
+# %pre% - prefix
+# %name% - name
+# %suf% - suffix
+# %msg% - message
+chat:
+  reformat: false
+  format: '<%pre%%name%%suf%> %msg%'
+playerlist:
+  reformat: true
+  format: '%pre%%name%%suf%'
+
+graylist:
+  group: graylist
+  track: graylist

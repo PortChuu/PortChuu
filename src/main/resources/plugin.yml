@@ -1,0 +1,131 @@
+name: PortChuu
+main: sh.chuu.port.mc.portchuu.PortChuu
+version: @version@
+description: Port Chuu Minecraft Server Plugin
+api-version: 1.15
+author: Simon Chuu
+website: https://port.chuu.sh
+softdepend: [LuckPerms, ProtocolLib, DiscordSRV]
+
+commands:
+  portchuu:
+    description: Port Chuu informational command
+    usage: /portchuu
+  gamemode:
+    aliases: [gm]
+    description: /gamemode, but only for survival and spectator modes
+    usage: /gamemode <survival|spectator>
+    permission: portchuu.command.gamemode
+  graylist:
+    aliases: [apply, greylist]
+    description: Check the graylist status, or graylist a player
+    usage: /graylist [player]
+    permission: portchuu.command.graylist
+  info:
+    aliases: [rules, links]
+    description: Shows the server info as a book
+    usage: /info
+    permission: portchuu.command.info
+  kill:
+    usage: /kill
+    description: /kill, but only self
+    permission: portchuu.command.kill
+  nickname:
+    aliases: [nick]
+    description: Set your nickname
+    usage: /nickname <set <nickname>|clear|setother <player> <nickname>|clearother <player>|list>
+    permission: portchuu.command.nickname
+  ping:
+    description: Get the ping of a player
+    usage: /ping [player]
+    permission: portchuu.command.ping
+  teleport:
+    aliases: [tp]
+    description: /teleport, but with different dimensions
+    usage: /teleport [entity] <entity|location>
+    permission: portchuu.command.teleport
+
+permissions:
+  portchuu.reload:
+    default: op
+
+  portchuu.build:
+    default: true
+  portchuu.graylist:
+    default: false
+  portchuu.chat.url:
+    default: true
+
+  portchuu.command.gamemode:
+    default: op
+  portchuu.command.gamemode.other:
+    default: op
+    children:
+      - portchuu.command.gamemode
+
+  portchuu.command.graylist:
+    default: true
+  portchuu.command.graylist.add:
+    default: op
+    children:
+      - portchuu.command.graylist
+
+  portchuu.command.info:
+    default: true
+
+  portchuu.command.kill:
+    default: true
+
+  portchuu.command.nickname:
+    default: op
+  portchuu.command.nickname.color:
+    default: op
+  portchuu.command.nickname.color.multiple:
+    default: op
+    children:
+      - portchuu.command.nickname.color
+  portchuu.command.nickname.magic:
+    default: op
+  portchuu.command.nickname.bold:
+    default: op
+  portchuu.command.nickname.italic:
+    default: op
+  portchuu.command.nickname.strikethrough:
+    default: op
+  portchuu.command.nickname.underline:
+    default: op
+  portchuu.command.nickname.allstyle:
+    default: op
+    children:
+      - portchuu.command.nickname.color.multiple
+      - portchuu.command.nickname.magic
+      - portchuu.command.nickname.bold
+      - portchuu.command.nickname.italic
+      - portchuu.command.nickname.strikethrough
+      - portchuu.command.nickname.underline
+  portchuu.command.nickname.list:
+    default: op
+    children:
+      - portchuu.command.nickname
+  portchuu.command.nickname.other:
+    default: op
+    children:
+      - portchuu.command.nickname
+  portchuu.command.nickname.self:
+    default: op
+    children:
+      - portchuu.command.nickname
+
+  portchuu.command.ping:
+    default: true
+  portchuu.command.ping.other:
+    default: op
+    children:
+      - portchuu.command.ping
+
+  portchuu.command.teleport:
+    default: op
+  portchuu.command.teleport.other:
+    default: op
+    children:
+      - portchuu.command.teleport
