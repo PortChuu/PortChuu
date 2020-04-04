@@ -61,7 +61,7 @@ public class PortChuu extends JavaPlugin {
         saveDefaultConfig();
 
         String chatFormat = getConfig().getBoolean("chat.reformat") ? getConfig().getString("chat.format") : null;
-        ChatHelper pe = new ChatHelper(this, chatFormat);
+        ListenerChatHelper pe = new ListenerChatHelper(this, chatFormat);
 
         if (isDiscordSRVLoaded())
             DiscordSRV.api.subscribe(discordSRVHook = new DiscordSRVHook(pe));

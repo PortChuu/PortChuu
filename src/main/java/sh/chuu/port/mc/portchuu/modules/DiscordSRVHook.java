@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
 import sh.chuu.port.mc.portchuu.TextTemplates;
 
 public class DiscordSRVHook {
-    private final ChatHelper pe;
+    private final ListenerChatHelper pe;
 
-    public DiscordSRVHook(ChatHelper pe) {
+    public DiscordSRVHook(ListenerChatHelper pe) {
         this.pe = pe;
     }
 

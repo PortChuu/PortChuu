@@ -23,7 +23,7 @@ import org.bukkit.material.Openable;
 import sh.chuu.port.mc.portchuu.PortChuu;
 
 
-public class BuildPermission implements Listener {
+public class ListenerBuildPermission implements Listener {
     private static final String BUILD_PERMISSION = "portchuu.build";
     private static final PermissionsModule permModule = PortChuu.getInstance().getPermissionsModule();
 

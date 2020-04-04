@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class ChatHelper implements Listener {
+public class ListenerChatHelper implements Listener {
     private static final String URL_PERM = "portchuu.chat.url";
 
     private final PortChuu plugin;
@@ -44,7 +44,7 @@ public class ChatHelper implements Listener {
     private final int chatSufPos;
     private final TextComponent chatMsg;
 
-    public ChatHelper(PortChuu plugin, String chatFormat) {
+    public ListenerChatHelper(PortChuu plugin, String chatFormat) {
         this.plugin = plugin;
         this.chatFormat = chatFormat;
 
