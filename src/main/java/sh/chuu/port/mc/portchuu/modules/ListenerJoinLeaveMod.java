@@ -107,14 +107,18 @@ public class ListenerJoinLeaveMod implements Listener {
     }
 
     private BaseComponent[] welcomeBack(long lastLoginTime, long diff, Locale locale) {
-        return new ComponentBuilder("Welcome back to the ")
-                .color(ChatColor.WHITE)
+        return new ComponentBuilder("=====")
+                .color(ChatColor.DARK_GRAY)
                 .bold(true)
+                .append(" Welcome back to the ")
+                .color(ChatColor.WHITE)
                 .append("Port Chuu")
                 .color(ChatColor.AQUA)
                 .event(new ClickEvent(ClickEvent.Action.OPEN_URL, WEBSITE_URL))
-                .append("!", ComponentBuilder.FormatRetention.FORMATTING)
+                .append("! ", ComponentBuilder.FormatRetention.FORMATTING)
                 .color(ChatColor.WHITE)
+                .append("=====\n")
+                .color(ChatColor.DARK_GRAY)
                 .append(" Your last login was ", ComponentBuilder.FormatRetention.NONE)
                 .color(ChatColor.GRAY)
                 .append(TextTemplates.timeText(lastLoginTime, (int) diff, true, locale, null, ChatColor.WHITE))
