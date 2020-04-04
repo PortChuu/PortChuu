@@ -2,7 +2,6 @@ package sh.chuu.port.mc.portchuu;
 
 import com.google.common.collect.ImmutableList;
 import github.scarsz.discordsrv.DiscordSRV;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import net.luckperms.api.LuckPerms;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -71,8 +70,11 @@ public class PortChuu extends JavaPlugin {
 
         nicknameModule = new NicknameModule(this);
         permissionsModule = new PermissionsModule(this);
+
+        if (getConfig().getBoolean("worldmod.thunder-fire", true))
+            getServer().getPluginManager().registerEvents(new ListenerDisableThunderFire(), this);
         getServer().getPluginManager().registerEvents(pe, this);
-        getServer().getPluginManager().registerEvents(new BuildPermission(), this);
+        getServer().getPluginManager().registerEvents(new ListenerBuildPermission(), this);
 
         PluginCommand cmdGamemode = getCommand("gamemode");
         PluginCommand cmdGraylist = getCommand("graylist");

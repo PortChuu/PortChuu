@@ -13,3 +13,6 @@ playerlist:
 graylist:
   group: graylist
   track: graylist
+
+worldmod:
+  thunder-fire: false
