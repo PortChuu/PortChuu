@@ -13,10 +13,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import sh.chuu.port.mc.portchuu.commands.*;
-import sh.chuu.port.mc.portchuu.modules.ChatHelper;
-import sh.chuu.port.mc.portchuu.modules.DiscordSRVHook;
-import sh.chuu.port.mc.portchuu.modules.NicknameModule;
-import sh.chuu.port.mc.portchuu.modules.PermissionsModule;
+import sh.chuu.port.mc.portchuu.modules.*;
 
 import java.util.List;
 
@@ -75,6 +72,7 @@ public class PortChuu extends JavaPlugin {
         nicknameModule = new NicknameModule(this);
         permissionsModule = new PermissionsModule(this);
         getServer().getPluginManager().registerEvents(pe, this);
+        getServer().getPluginManager().registerEvents(new BuildPermission(), this);
 
         PluginCommand cmdGamemode = getCommand("gamemode");
         PluginCommand cmdGraylist = getCommand("graylist");
