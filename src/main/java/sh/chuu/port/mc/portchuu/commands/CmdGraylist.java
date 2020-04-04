@@ -27,7 +27,6 @@ public class CmdGraylist implements TabExecutor {
     private final PermissionsModule module = PortChuu.getInstance().getPermissionsModule();
 
     @Override
-    // TODO: OML I NEED TO STOP BEING TOO FANCY QWQ
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender.hasPermission(ADD_PERM)) {
             if (args.length > 2) {
@@ -54,12 +53,25 @@ public class CmdGraylist implements TabExecutor {
         module.getUUID(name).thenAcceptAsync(uuid -> {
             if (uuid == null) {
                 // UUID doesn't exist!
-                sender.sendMessage("UUID does not exist!");
+                sender.sendMessage(TextTemplates.unknownPlayer());
                 return;
             }
 
             module.graylist(uuid).thenAcceptAsync(success -> {
-                // TODO
+                if (success)
+                    sender.sendMessage(new ComponentBuilder(name + " is now ")
+                            .color(ChatColor.WHITE)
+                            .append("graylisted!")
+                            .color(ChatColor.GREEN)
+                            .create()
+                    );
+                else
+                    sender.sendMessage(new ComponentBuilder(name)
+                            .color(ChatColor.WHITE)
+                            .append(" was already graylisted!")
+                            .color(ChatColor.GRAY)
+                            .create()
+                    );
             });
         });
     }
