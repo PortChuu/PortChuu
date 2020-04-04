@@ -5,14 +5,13 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import sh.chuu.port.mc.portchuu.NicknameManager;
+import sh.chuu.port.mc.portchuu.modules.NicknameModule;
 import sh.chuu.port.mc.portchuu.PortChuu;
 import sh.chuu.port.mc.portchuu.TextTemplates;
 
@@ -38,10 +37,10 @@ public class CmdNickname implements TabExecutor {
     private static final String CLEAROTHER = "clearother";
     private static final String LIST = "list";
 
-    private final NicknameManager nicknameManager;
+    private final NicknameModule nicknameModule;
 
-    public CmdNickname(NicknameManager nicknameManager) {
-        this.nicknameManager = nicknameManager;
+    public CmdNickname(NicknameModule nicknameModule) {
+        this.nicknameModule = nicknameModule;
     }
 
     @Override
@@ -182,7 +181,7 @@ public class CmdNickname implements TabExecutor {
             newNick = nickColored;
         }
 
-        String oldNick = nicknameManager.setNick(target, newNick);
+        String oldNick = nicknameModule.setNick(target, newNick);
         BaseComponent[] prevNick = oldNick == null ? new BaseComponent[]{new TextComponent(target.getName())} : TextComponent.fromLegacyText(oldNick);
 
         sender.sendMessage(new ComponentBuilder(target.getName())
@@ -200,7 +199,7 @@ public class CmdNickname implements TabExecutor {
     }
 
     private void clearNick(CommandSender sender, OfflinePlayer p) {
-        String oldNick = nicknameManager.setNick(p, null);
+        String oldNick = nicknameModule.setNick(p, null);
         if (oldNick == null) {
             sender.sendMessage(new ComponentBuilder(p.getName())
                     .color(ChatColor.WHITE)

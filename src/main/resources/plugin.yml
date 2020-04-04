@@ -51,8 +51,7 @@ permissions:
 
   portchuu.build:
     default: true
-  portchuu.graylist:
-    default: false
+    description: Allows players to manipulate/build on the world
   portchuu.chat.url:
     default: true
 

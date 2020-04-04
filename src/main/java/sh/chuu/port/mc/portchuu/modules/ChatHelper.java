@@ -1,11 +1,10 @@
-package sh.chuu.port.mc.portchuu;
+package sh.chuu.port.mc.portchuu.modules;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import net.luckperms.api.LuckPerms;
@@ -24,12 +23,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import sh.chuu.port.mc.portchuu.PortChuu;
+import sh.chuu.port.mc.portchuu.TextTemplates;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class PlayerEvents implements Listener {
+public class ChatHelper implements Listener {
     private static final String URL_PERM = "portchuu.chat.url";
 
     private final PortChuu plugin;
@@ -43,7 +44,7 @@ public class PlayerEvents implements Listener {
     private final int chatSufPos;
     private final TextComponent chatMsg;
 
-    PlayerEvents(PortChuu plugin, String chatFormat) {
+    public ChatHelper(PortChuu plugin, String chatFormat) {
         this.plugin = plugin;
         this.chatFormat = chatFormat;
 
@@ -169,7 +170,7 @@ public class PlayerEvents implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent ev) {
         Player p = ev.getPlayer();
-        plugin.getNicknameManager().initPlayerNick(p);
+        plugin.getNicknameModule().initPlayerNick(p);
         String testMsg = ev.getJoinMessage();
         if (testMsg != null && !testMsg.isEmpty()) {
             ev.setJoinMessage(null);
@@ -187,6 +188,7 @@ public class PlayerEvents implements Listener {
                     return;
 
                 if (ev.getPacket().getEnumModifier(EnumWrappers.ChatVisibility.class, 2).read(0) != EnumWrappers.ChatVisibility.FULL) {
+                    // If player's chat settings is disabled, notify them.
                     ev.getPlayer().sendMessage(new ComponentBuilder(new TranslatableComponent("chat.cannotSend"))
                             .color(ChatColor.RED)
                             .append(" (")
@@ -223,7 +225,7 @@ public class PlayerEvents implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLeave(PlayerQuitEvent ev) {
         Player p = ev.getPlayer();
-        plugin.getNicknameManager().unloadPlayerNick(p);
+        plugin.getNicknameModule().unloadPlayerNick(p);
         String testMsg = ev.getQuitMessage();
         if (testMsg != null && !testMsg.isEmpty()) {
             ev.setQuitMessage(null);
@@ -246,9 +248,7 @@ public class PlayerEvents implements Listener {
             BaseComponent send = new TranslatableComponent(chatFormat, name, ev.getMessage());
             for (Player pl : ev.getRecipients()) {
                 //noinspection deprecation
-                pl.sendMessage(ChatMessageType.CHAT,
-                        send
-                );
+                pl.sendMessage(ChatMessageType.CHAT, send);
             }
             ev.getRecipients().clear();
             return;

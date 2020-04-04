@@ -2,6 +2,7 @@ package sh.chuu.port.mc.portchuu;
 
 import com.google.common.collect.ImmutableList;
 import github.scarsz.discordsrv.DiscordSRV;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import net.luckperms.api.LuckPerms;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -12,12 +13,17 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import sh.chuu.port.mc.portchuu.commands.*;
+import sh.chuu.port.mc.portchuu.modules.ChatHelper;
+import sh.chuu.port.mc.portchuu.modules.DiscordSRVHook;
+import sh.chuu.port.mc.portchuu.modules.NicknameModule;
+import sh.chuu.port.mc.portchuu.modules.PermissionsModule;
 
 import java.util.List;
 
 public class PortChuu extends JavaPlugin {
     private static PortChuu instance = null;
-    private NicknameManager nicknameManager = null;
+    private NicknameModule nicknameModule = null;
+    private PermissionsModule permissionsModule = null;
     private LuckPerms lpAPI = null;
     private DiscordSRVHook discordSRVHook = null;
 
@@ -25,8 +31,12 @@ public class PortChuu extends JavaPlugin {
         return PortChuu.instance;
     }
 
-    public NicknameManager getNicknameManager() {
-        return nicknameManager;
+    public NicknameModule getNicknameModule() {
+        return nicknameModule;
+    }
+
+    public PermissionsModule getPermissionsModule() {
+        return permissionsModule;
     }
 
     public LuckPerms getLpAPI() {
@@ -55,13 +65,15 @@ public class PortChuu extends JavaPlugin {
         saveDefaultConfig();
 
         String chatFormat = getConfig().getBoolean("chat.reformat") ? getConfig().getString("chat.format") : null;
-        PlayerEvents pe = new PlayerEvents(this, chatFormat);
+        ChatHelper pe = new ChatHelper(this, chatFormat);
+
         if (isDiscordSRVLoaded())
             DiscordSRV.api.subscribe(discordSRVHook = new DiscordSRVHook(pe));
         else
             getLogger().warning("DiscordSRV not enabled!");
 
-        nicknameManager = new NicknameManager(this);
+        nicknameModule = new NicknameModule(this);
+        permissionsModule = new PermissionsModule(this);
         getServer().getPluginManager().registerEvents(pe, this);
 
         PluginCommand cmdGamemode = getCommand("gamemode");
@@ -75,7 +87,7 @@ public class PortChuu extends JavaPlugin {
         cmdGamemode.setExecutor(new CmdGamemode());
         cmdGraylist.setExecutor(new CmdGraylist());
         cmdKill.setExecutor(new CmdKill());
-        cmdNickname.setExecutor(new CmdNickname(nicknameManager));
+        cmdNickname.setExecutor(new CmdNickname(nicknameModule));
         cmdPing.setExecutor(new CmdPing());
         cmdInfo.setExecutor(new CmdInfo());
         cmdTeleport.setExecutor(new CmdTeleport());
@@ -88,7 +100,7 @@ public class PortChuu extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        nicknameManager.onDisable();
+        nicknameModule.onDisable();
         if (isDiscordSRVLoaded())
             DiscordSRV.api.unsubscribe(discordSRVHook);
         PortChuu.instance = null;

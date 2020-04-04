@@ -1,4 +1,4 @@
-package sh.chuu.port.mc.portchuu;
+package sh.chuu.port.mc.portchuu.modules;
 
 import com.google.common.base.Charsets;
 import net.luckperms.api.LuckPerms;
@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import sh.chuu.port.mc.portchuu.PortChuu;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,20 +18,19 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 
 /**
  * Heccin I gotta put this into another heccin plugin because this itself is very long and other server
  * admins might find a good use for this >w> <w< uwu
  */
-public class NicknameManager {
+public class NicknameModule {
     private PortChuu plugin;
     private File configFile;
     private YamlConfiguration config;
     private Map<UUID, String> nickCache = new HashMap<>(); // Only loads the nickname of the player currently online
 
-    NicknameManager(PortChuu plugin) {
+    public NicknameModule(PortChuu plugin) {
         this.plugin = plugin;
         this.configFile = new File(plugin.getDataFolder(), "nicknames.yml");
         if (!configFile.exists()) {
@@ -106,7 +106,7 @@ public class NicknameManager {
         return oldnick;
     }
 
-    void initPlayerNick(Player p) {
+    public void initPlayerNick(Player p) {
         UUID uid = p.getUniqueId();
         String nick = config.getString(uid.toString());
         if (nick == null) return;
@@ -115,7 +115,7 @@ public class NicknameManager {
         applyNick(p, nick);
     }
 
-    void unloadPlayerNick(Player p) {
+    public void unloadPlayerNick(Player p) {
         nickCache.remove(p.getUniqueId());
     }
 

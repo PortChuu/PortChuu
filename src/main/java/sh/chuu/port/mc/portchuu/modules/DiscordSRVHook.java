@@ -1,4 +1,4 @@
-package sh.chuu.port.mc.portchuu;
+package sh.chuu.port.mc.portchuu.modules;
 
 import github.scarsz.discordsrv.api.Subscribe;
 import github.scarsz.discordsrv.api.events.DiscordGuildMessagePostProcessEvent;
@@ -7,11 +7,12 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import sh.chuu.port.mc.portchuu.TextTemplates;
 
 public class DiscordSRVHook {
-    private final PlayerEvents pe;
+    private final ChatHelper pe;
 
-    public DiscordSRVHook(PlayerEvents pe) {
+    public DiscordSRVHook(ChatHelper pe) {
         this.pe = pe;
     }
 
