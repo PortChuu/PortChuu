@@ -245,13 +245,13 @@ public class CmdTeleport implements TabExecutor {
             List<String> list = new ArrayList<>();
             String numarg = null;
             try {
-                parseRelDouble(args[1], 0d);
+                parseRelDouble(args[0], 0d);
                 if (args[1].isEmpty()) {
                     numarg = String.valueOf(loc.getBlockY());
                 } else {
+                    parseRelDouble(args[1], 0d);
                     numarg = args[1];
                 }
-                parseRelDouble(args[0], 0d);
                 list.add(numarg);
                 list.add(numarg + ' ' + loc.getBlockZ());
                 list.add(numarg + ' ' + loc.getBlockZ() + ' ' + loc.getWorld().getName());
@@ -259,14 +259,11 @@ public class CmdTeleport implements TabExecutor {
 
             // name + coords section for teleporting others
             if (sender.hasPermission(OTHER_PERM)) {
-                String numarg2;
-                if (args[1].isEmpty()) numarg2 = String.valueOf(loc.getBlockX());
-                else numarg2 = numarg;
-                if (numarg2 != null) {
-                    list.add(numarg2);
-                    list.add(numarg2 + ' ' + loc.getBlockY());
-                    list.add(numarg2 + ' ' + loc.getBlockY() + ' ' + loc.getBlockZ());
-                    list.add(numarg2 + ' ' + loc.getBlockY() + ' ' + loc.getBlockZ() + ' ' + loc.getWorld().getName());
+                if (numarg != null) {
+                    if (args[1].isEmpty()) numarg = String.valueOf(loc.getBlockX());
+                    list.add(numarg + ' ' + loc.getBlockY());
+                    list.add(numarg + ' ' + loc.getBlockY() + ' ' + loc.getBlockZ());
+                    list.add(numarg + ' ' + loc.getBlockY() + ' ' + loc.getBlockZ() + ' ' + loc.getWorld().getName());
                 }
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     String name = p.getName();
