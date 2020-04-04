@@ -245,13 +245,13 @@ public class CmdTeleport implements TabExecutor {
             List<String> list = new ArrayList<>();
             String numarg = null;
             try {
-                parseRelDouble(args[0], 0d);
                 if (args[1].isEmpty()) {
                     numarg = String.valueOf(loc.getBlockY());
                 } else {
                     parseRelDouble(args[1], 0d);
                     numarg = args[1];
                 }
+                parseRelDouble(args[0], 0d);
                 list.add(numarg);
                 list.add(numarg + ' ' + loc.getBlockZ());
                 list.add(numarg + ' ' + loc.getBlockZ() + ' ' + loc.getWorld().getName());
