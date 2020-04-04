@@ -29,8 +29,9 @@ public class CmdGraylist implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender.hasPermission(ADD_PERM)) {
-            if (args.length > 2) {
+            if (args.length < 2) {
                 sender.sendMessage(usageAdd());
+                return true;
             }
             if (args[0].equalsIgnoreCase(ADD))
                 doGraylist(sender, args[1]);
@@ -42,9 +43,7 @@ public class CmdGraylist implements TabExecutor {
             checkGraylist(sender, null);
         }
 
-        if (args.length == 1) {
-            checkGraylist(sender, args[0]);
-        }
+        checkGraylist(sender, args[0]);
 
         return true;
     }
@@ -58,13 +57,9 @@ public class CmdGraylist implements TabExecutor {
             }
 
             module.graylist(uuid).thenAcceptAsync(success -> {
+                PortChuu.getInstance().getLogger().info("Hit 1");
                 if (success)
-                    sender.sendMessage(new ComponentBuilder(name + " is now ")
-                            .color(ChatColor.WHITE)
-                            .append("graylisted!")
-                            .color(ChatColor.GREEN)
-                            .create()
-                    );
+                    broadcastGraylist(name);
                 else
                     sender.sendMessage(new ComponentBuilder(name)
                             .color(ChatColor.WHITE)
@@ -82,14 +77,14 @@ public class CmdGraylist implements TabExecutor {
             if (module.isGraylisted(sender))
                 sender.sendMessage(new ComponentBuilder("You are ")
                         .color(ChatColor.GRAY)
-                        .append("graylisted!")
+                        .append("graylisted")
                         .color(ChatColor.GREEN)
                         .create()
                 );
             else
-                sender.sendMessage(new ComponentBuilder("Apply for the graylist ")
+                sender.sendMessage(new ComponentBuilder("You're not graylisted. ")
                         .color(ChatColor.GRAY)
-                        .append("here!")
+                        .append("Apply for the graylist here!")
                         .color(ChatColor.AQUA)
                         .event(new ClickEvent(ClickEvent.Action.OPEN_URL, GRAYLIST_URL))
                         .create()
@@ -100,16 +95,16 @@ public class CmdGraylist implements TabExecutor {
         Player p = Bukkit.getPlayerExact(name);
         if (p != null) {
             sendGraylistedMessage(sender, name, module.isGraylisted(p));
+        } else {
+            module.getUUID(name).thenAcceptAsync(uuid -> {
+                if (uuid == null) {
+                    // UUID doesn't exist!
+                    sender.sendMessage(TextTemplates.unknownPlayer());
+                    return;
+                }
+                module.isGraylisted(uuid).thenAccept(listed -> sendGraylistedMessage(sender, name, listed));
+            });
         }
-
-        module.getUUID(name).thenAcceptAsync(uuid -> {
-            if (uuid == null) {
-                // UUID doesn't exist!
-                sender.sendMessage(TextTemplates.unknownPlayer());
-                return;
-            }
-            module.isGraylisted(uuid).thenAccept(listed -> sendGraylistedMessage(sender, name, listed));
-        });
     }
 
     private void sendGraylistedMessage(CommandSender sender, String name, boolean listed) {
@@ -118,7 +113,7 @@ public class CmdGraylist implements TabExecutor {
                     .color(ChatColor.WHITE)
                     .append(" is ")
                     .color(ChatColor.GRAY)
-                    .append("graylisted!")
+                    .append("graylisted")
                     .color(ChatColor.GREEN)
                     .create()
             );
@@ -127,10 +122,19 @@ public class CmdGraylist implements TabExecutor {
                     .color(ChatColor.WHITE)
                     .append(" is ")
                     .color(ChatColor.GRAY)
-                    .append("not graylisted!")
+                    .append("not")
                     .color(ChatColor.RED)
+                    .append(" graylisted")
+                    .color(ChatColor.GRAY)
                     .create()
             );
+    }
+
+    private void broadcastGraylist(String name) {
+        BaseComponent send = new TextComponent(name + " is now graylisted");
+        send.setColor(ChatColor.YELLOW);
+        Bukkit.broadcast(send);
+        Bukkit.getConsoleSender().sendMessage(send);
     }
 
     private BaseComponent usageAdd() {
