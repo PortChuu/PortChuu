@@ -22,6 +22,7 @@ import sh.chuu.port.mc.portchuu.TextTemplates;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.UUID;
 
 public class ListenerJoinLeaveMod implements Listener {
@@ -49,7 +50,7 @@ public class ListenerJoinLeaveMod implements Listener {
         if (p.hasPlayedBefore()) {
             int diff = (int) (System.currentTimeMillis() - lastseen.remove(p.getUniqueId())) / 1000;
             if (diff > 10)
-                p.sendMessage(welcomeBack(p.getLastLogin(), diff));
+                p.sendMessage(welcomeBack(p.getLastLogin(), diff, TextTemplates.locale((p.getLocale()))));
         } else {
             p.sendMessage(newPlayer(name));
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -105,7 +106,7 @@ public class ListenerJoinLeaveMod implements Listener {
                 .create();
     }
 
-    private BaseComponent[] welcomeBack(long lastLoginTime, long diff) {
+    private BaseComponent[] welcomeBack(long lastLoginTime, long diff, Locale locale) {
         return new ComponentBuilder("Welcome back to the ")
                 .color(ChatColor.WHITE)
                 .bold(true)
@@ -116,7 +117,7 @@ public class ListenerJoinLeaveMod implements Listener {
                 .color(ChatColor.WHITE)
                 .append(" Your last login was ", ComponentBuilder.FormatRetention.NONE)
                 .color(ChatColor.GRAY)
-                .append(TextTemplates.timeText(lastLoginTime, (int) diff, true, null, null, ChatColor.WHITE))
+                .append(TextTemplates.timeText(lastLoginTime, (int) diff, true, locale, null, ChatColor.WHITE))
                 .append(".")
                 .color(ChatColor.GRAY)
                 .create();

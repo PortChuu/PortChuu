@@ -79,18 +79,20 @@ public class PortChuu extends JavaPlugin {
 
         PluginCommand cmdGamemode = getCommand("gamemode");
         PluginCommand cmdGraylist = getCommand("graylist");
+        PluginCommand cmdInfo = getCommand("info");
         PluginCommand cmdKill = getCommand("kill");
         PluginCommand cmdNickname = getCommand("nickname");
         PluginCommand cmdPing = getCommand("ping");
-        PluginCommand cmdInfo = getCommand("info");
+        PluginCommand cmdSeen = getCommand("seen");
         PluginCommand cmdTeleport = getCommand("teleport");
 
         cmdGamemode.setExecutor(new CmdGamemode());
         cmdGraylist.setExecutor(new CmdGraylist());
+        cmdInfo.setExecutor(new CmdInfo());
         cmdKill.setExecutor(new CmdKill());
         cmdNickname.setExecutor(new CmdNickname(nicknameModule));
         cmdPing.setExecutor(new CmdPing());
-        cmdInfo.setExecutor(new CmdInfo());
+        cmdSeen.setExecutor(new CmdSeen());
         cmdTeleport.setExecutor(new CmdTeleport());
 
         getConfig();

@@ -39,6 +39,10 @@ commands:
     description: Get the ping of a player
     usage: /ping [player]
     permission: portchuu.command.ping
+  seen:
+    description: Get the last logout of a player
+    usage: /seen <online player>
+    permission: portchuu.command.seen
   teleport:
     aliases: [tp]
     description: /teleport, but with different dimensions
@@ -121,6 +125,9 @@ permissions:
     default: op
     children:
       - portchuu.command.ping
+
+  portchuu.command.seen:
+    default: true
 
   portchuu.command.teleport:
     default: op

@@ -135,6 +135,15 @@ public interface TextTemplates {
         }
     }
 
+    static Locale locale(String loc) {
+        String[] p = loc.split("_");
+        if (p.length == 1)
+            return new Locale(p[0]);
+        if (p.length == 2)
+            return new Locale(p[0], p[1]);
+        return new Locale(p[0], p[1], p[2]);
+    }
+
     static BaseComponent timeText(long time, int diff, boolean past, Locale locale, TimeZone timeZone, ChatColor focusColor) {
         TimeZone zone = timeZone == null ? TimeZone.getDefault() : timeZone;
         Locale loc = locale == null ? Locale.getDefault() : locale;
