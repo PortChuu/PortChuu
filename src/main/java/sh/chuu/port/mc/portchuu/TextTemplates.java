@@ -6,6 +6,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.text.DateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
+
 public interface TextTemplates {
     static BaseComponent injectPlayerTooltip(BaseComponent comp, String name, String type, String uuid, String suggestion) {
         ComponentBuilder hover = new ComponentBuilder(name + "\nType: " + type + "\n" + uuid);
@@ -129,5 +133,81 @@ public interface TextTemplates {
             if (p != sender)
                 p.sendMessage(msg);
         }
+    }
+
+    static BaseComponent timeText(long time, int diff, boolean past, Locale locale, TimeZone timeZone, ChatColor focusColor) {
+        TimeZone zone = timeZone == null ? TimeZone.getDefault() : timeZone;
+        Locale loc = locale == null ? Locale.getDefault() : locale;
+        BaseComponent ret = new TextComponent();
+        DateFormat d;
+        if (diff < 60) {
+            BaseComponent sec = new TextComponent(diff + " second" + (diff == 1 ? "" : "s"));
+            sec.setColor(focusColor);
+            if (!past) {
+                ret.addExtra("in ");
+            }
+
+            ret.addExtra(sec);
+            if (past) {
+                ret.addExtra(" ago");
+            }
+        } else {
+            TextComponent day;
+            int di;
+            if (diff < 3600) {
+                di = diff / 60;
+                day = new TextComponent(di + " minute" + (di == 1 ? "" : "s"));
+                day.setColor(focusColor);
+                if (!past) {
+                    ret.addExtra("in ");
+                }
+
+                ret.addExtra(day);
+                if (past) {
+                    ret.addExtra(" ago");
+                }
+            } else if (diff < 86400) {
+                di = diff / 3600;
+                day = new TextComponent(di + " hour" + (di == 1 ? "" : "s"));
+                day.setColor(focusColor);
+                if (!past) {
+                    ret.addExtra("in ");
+                }
+
+                ret.addExtra(day);
+                if (past) {
+                    ret.addExtra(" ago");
+                }
+            } else if (diff < 604800) {
+                di = diff / 86400;
+                int h = diff / 3600 % 24;
+                day = new TextComponent(di + " day" + (di == 1 ? "" : "s"));
+                day.setColor(focusColor);
+                if (!past) {
+                    ret.addExtra("in ");
+                }
+
+                ret.addExtra(day);
+                ret.addExtra(" and " + h + " hour" + (h == 1 ? "" : "s"));
+                if (past) {
+                    ret.addExtra(" ago");
+                }
+            } else {
+                ret.addExtra("on ");
+                d = DateFormat.getDateInstance(1, loc);
+                d.setTimeZone(zone);
+                day = new TextComponent(d.format(time));
+                day.setColor(focusColor);
+                ret.addExtra(day);
+                DateFormat t = DateFormat.getTimeInstance(0, loc);
+                t.setTimeZone(zone);
+                ret.addExtra(" at " + t.format(time));
+            }
+        }
+
+        d = DateFormat.getDateTimeInstance(0, 0, loc);
+        d.setTimeZone(zone);
+        ret.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT, (new ComponentBuilder(d.format(time))).create()));
+        return ret;
     }
 }

@@ -1,19 +1,11 @@
 package sh.chuu.port.mc.portchuu.modules;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.EnumWrappers;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.query.QueryOptions;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.entity.Player;
@@ -21,8 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import sh.chuu.port.mc.portchuu.PortChuu;
 import sh.chuu.port.mc.portchuu.TextTemplates;
 
@@ -48,7 +38,6 @@ public class ListenerChatHelper implements Listener {
         this.plugin = plugin;
         this.chatFormat = chatFormat;
 
-        // Fix the colors
         if (chatFormat != null && chatFormat.indexOf(ChatColor.COLOR_CHAR) != -1) {
             int pi = chatFormat.indexOf("%pre%");
             int ni = chatFormat.indexOf("%name%");
@@ -164,76 +153,6 @@ public class ListenerChatHelper implements Listener {
             this.chatNamePos = this.chatPrePos = this.chatSufPos = -1;
             this.chatMsg = null;
             this.chatComponents = null;
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onJoin(PlayerJoinEvent ev) {
-        Player p = ev.getPlayer();
-        plugin.getNicknameModule().initPlayerNick(p);
-        String testMsg = ev.getJoinMessage();
-        if (testMsg != null && !testMsg.isEmpty()) {
-            ev.setJoinMessage(null);
-            BaseComponent bc = new TranslatableComponent("multiplayer.player.joined",
-                    TextTemplates.createPlayerTooltipLegacy(p.getDisplayName(), p.getName(), p.getUniqueId().toString())
-            );
-            bc.setColor(ChatColor.YELLOW);
-            TextTemplates.broadcastExcept(bc, ev.getPlayer());
-        }
-        ProtocolManager pm = ProtocolLibrary.getProtocolManager();
-        pm.addPacketListener(new PacketAdapter(plugin, ListenerPriority.NORMAL, PacketType.Play.Client.SETTINGS) {
-            @Override
-            public void onPacketReceiving(PacketEvent ev) {
-                if (p != ev.getPlayer())
-                    return;
-
-                if (ev.getPacket().getEnumModifier(EnumWrappers.ChatVisibility.class, 2).read(0) != EnumWrappers.ChatVisibility.FULL) {
-                    // If player's chat settings is disabled, notify them.
-                    ev.getPlayer().sendMessage(new ComponentBuilder(new TranslatableComponent("chat.cannotSend"))
-                            .color(ChatColor.RED)
-                            .append(" (")
-                            .color(ChatColor.GRAY)
-                            .append(new TranslatableComponent("menu.options"))
-                            .color(ChatColor.WHITE)
-                            .append(" > ")
-                            .color(ChatColor.GRAY)
-                            .append(new TranslatableComponent("options.chat.title"))
-                            .color(ChatColor.WHITE)
-                            .append(" > ")
-                            .color(ChatColor.GRAY)
-                            .append(new TranslatableComponent("options.chat.visibility"))
-                            .color(ChatColor.WHITE)
-                            .append(": ")
-                            .append(new TranslatableComponent("options.chat.visibility.system"))
-                            .append(" => ")
-                            .color(ChatColor.YELLOW)
-                            .append(new TranslatableComponent("options.chat.visibility"))
-                            .color(ChatColor.GREEN)
-                            .append(": ")
-                            .append(new TranslatableComponent("options.chat.visibility.full"))
-                            .append(")")
-                            .color(ChatColor.GRAY)
-                            .create()
-                    );
-                }
-
-                pm.removePacketListener(this);
-            }
-        });
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onLeave(PlayerQuitEvent ev) {
-        Player p = ev.getPlayer();
-        plugin.getNicknameModule().unloadPlayerNick(p);
-        String testMsg = ev.getQuitMessage();
-        if (testMsg != null && !testMsg.isEmpty()) {
-            ev.setQuitMessage(null);
-            BaseComponent bc = new TranslatableComponent("multiplayer.player.left",
-                    TextTemplates.createPlayerTooltipLegacy(p.getDisplayName(), p.getName(), p.getUniqueId().toString())
-            );
-            bc.setColor(ChatColor.YELLOW);
-            TextTemplates.broadcastExcept(bc, ev.getPlayer());
         }
     }
 

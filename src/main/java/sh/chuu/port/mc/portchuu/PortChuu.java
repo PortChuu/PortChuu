@@ -75,6 +75,7 @@ public class PortChuu extends JavaPlugin {
             getServer().getPluginManager().registerEvents(new ListenerDisableThunderFire(), this);
         getServer().getPluginManager().registerEvents(pe, this);
         getServer().getPluginManager().registerEvents(new ListenerBuildPermission(), this);
+        getServer().getPluginManager().registerEvents(new ListenerJoinLeaveMod(), this);
 
         PluginCommand cmdGamemode = getCommand("gamemode");
         PluginCommand cmdGraylist = getCommand("graylist");
