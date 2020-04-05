@@ -22,7 +22,7 @@ commands:
     permission: portchuu.command.gamemode
   graylist:
     aliases: [apply, greylist]
-    description: Check the graylist status, or graylist a player
+    description: Check the graylist status
     usage: /graylist [player]
     permission: portchuu.command.graylist
   info:
@@ -43,6 +43,10 @@ commands:
     description: Get the ping of a player
     usage: /ping [player]
     permission: portchuu.command.ping
+  report:
+    description: Get link to the report form
+    usage: /report
+    permission: portchuu.command.report
   seen:
     description: Get the last logout of a player
     usage: /seen <online player>
@@ -132,6 +136,9 @@ permissions:
     default: op
     children:
       - portchuu.command.ping
+
+  portchuu.command.report:
+    default: true
 
   portchuu.command.seen:
     default: true

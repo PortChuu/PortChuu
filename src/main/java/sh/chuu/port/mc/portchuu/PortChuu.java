@@ -84,6 +84,7 @@ public class PortChuu extends JavaPlugin {
         PluginCommand cmdKill = getCommand("kill");
         PluginCommand cmdNickname = getCommand("nickname");
         PluginCommand cmdPing = getCommand("ping");
+        PluginCommand cmdReport = getCommand("report");
         PluginCommand cmdSeen = getCommand("seen");
         PluginCommand cmdTeleport = getCommand("teleport");
 
@@ -94,6 +95,7 @@ public class PortChuu extends JavaPlugin {
         cmdKill.setExecutor(new CmdKill());
         cmdNickname.setExecutor(new CmdNickname(nicknameModule));
         cmdPing.setExecutor(new CmdPing());
+        cmdReport.setExecutor(new CmdReport());
         cmdSeen.setExecutor(new CmdSeen());
         cmdTeleport.setExecutor(new CmdTeleport());
 
