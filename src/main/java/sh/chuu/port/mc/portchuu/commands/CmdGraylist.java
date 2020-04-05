@@ -20,7 +20,7 @@ import java.util.List;
 
 public class CmdGraylist implements TabExecutor {
     private static final String ADD_PERM = "portchuu.command.graylist.add";
-    private static final String GRAYLIST_URL = "https://port.chuu.sh/graylist.html";
+    private static final String GRAYLIST_URL = "https://port.chuu.sh/graylist";
     private static final String ADD = "add";
     private static final String CHECK = "check";
 

@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class ListenerJoinLeaveMod implements Listener {
-    private static final String GRAYLIST_URL = "https://port.chuu.sh/graylist.html";
+    private static final String GRAYLIST_URL = "https://port.chuu.sh/graylist";
     private static final String WEBSITE_URL = "https://port.chuu.sh/";
     private final PortChuu plugin = PortChuu.getInstance();
     private final NicknameModule nicknameModule = plugin.getNicknameModule();
