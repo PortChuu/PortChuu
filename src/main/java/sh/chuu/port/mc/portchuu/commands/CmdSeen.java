@@ -48,7 +48,7 @@ public class CmdSeen implements TabExecutor {
             //noinspection deprecation
             target = Bukkit.getOfflinePlayer(args[0]);
             long time = target.getLastSeen();
-            int diff = (int)(System.currentTimeMillis() - time) / 1000;
+            int diff = (int)((System.currentTimeMillis() - time) / 1000);
             Locale locale = sender instanceof Player ? TextTemplates.locale(((Player) sender).getLocale()) : null;
 
             sender.sendMessage(new ComponentBuilder(target.getName())

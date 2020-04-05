@@ -43,7 +43,7 @@ public class CmdFirstSeen implements TabExecutor {
             //noinspection deprecation
             target = pl == null ? Bukkit.getOfflinePlayer(args[0]) : pl;
             long time = target.getFirstPlayed();
-            int diff = (int)(System.currentTimeMillis() - time) / 1000;
+            int diff = (int)((System.currentTimeMillis() - time) / 1000);
             Locale locale = sender instanceof Player ? TextTemplates.locale(((Player) sender).getLocale()) : null;
 
             sender.sendMessage(new ComponentBuilder(target.getName())
