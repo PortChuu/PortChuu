@@ -17,7 +17,7 @@ public class CmdReport implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        sender.sendMessage(new ComponentBuilder("Submit a report using this form")
+        sender.sendMessage(new ComponentBuilder("Submit a report by clicking here")
                 .color(ChatColor.AQUA)
                 .event(new ClickEvent(ClickEvent.Action.OPEN_URL, REPORT_URL))
                 .create()
