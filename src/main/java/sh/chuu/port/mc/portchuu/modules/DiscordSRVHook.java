@@ -1,8 +1,10 @@
 package sh.chuu.port.mc.portchuu.modules;
 
+import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.api.Subscribe;
 import github.scarsz.discordsrv.api.events.DiscordGuildMessagePostProcessEvent;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
+import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
@@ -14,6 +16,12 @@ public class DiscordSRVHook {
 
     public DiscordSRVHook(ListenerChatHelper pe) {
         this.pe = pe;
+    }
+
+    public void sendChat(String msg) {
+        TextChannel chan = DiscordSRV.getPlugin().getMainTextChannel();
+        if (chan != null)
+            chan.sendMessage(msg).complete();
     }
 
     @Subscribe

@@ -13,6 +13,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import sh.chuu.port.mc.portchuu.PortChuu;
 import sh.chuu.port.mc.portchuu.TextTemplates;
+import sh.chuu.port.mc.portchuu.modules.DiscordSRVHook;
 import sh.chuu.port.mc.portchuu.modules.PermissionsModule;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class CmdGraylist implements TabExecutor {
                 else
                     sender.sendMessage(new ComponentBuilder(name)
                             .color(ChatColor.WHITE)
-                            .append(" was already graylisted!")
+                            .append(" is already graylisted!")
                             .color(ChatColor.GRAY)
                             .create()
                     );
@@ -132,10 +133,11 @@ public class CmdGraylist implements TabExecutor {
     }
 
     private void broadcastGraylist(String name) {
-        BaseComponent send = new TextComponent(name + " is now graylisted");
+        BaseComponent send = new TextComponent(name + " is now graylisted!");
         send.setColor(ChatColor.YELLOW);
         Bukkit.broadcast(send);
         Bukkit.getConsoleSender().sendMessage(send);
+        PortChuu.getInstance().sendToDiscord(":tada: **" + name + " is now graylisted!**");
     }
 
     private BaseComponent usageAdd() {
