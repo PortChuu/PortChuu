@@ -77,6 +77,7 @@ public class PortChuu extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ListenerBuildPermission(), this);
         getServer().getPluginManager().registerEvents(new ListenerJoinLeaveMod(), this);
 
+        PluginCommand cmdFirstSeen = getCommand("firstseen");
         PluginCommand cmdGamemode = getCommand("gamemode");
         PluginCommand cmdGraylist = getCommand("graylist");
         PluginCommand cmdInfo = getCommand("info");
@@ -86,6 +87,7 @@ public class PortChuu extends JavaPlugin {
         PluginCommand cmdSeen = getCommand("seen");
         PluginCommand cmdTeleport = getCommand("teleport");
 
+        cmdFirstSeen.setExecutor(new CmdFirstSeen());
         cmdGamemode.setExecutor(new CmdGamemode());
         cmdGraylist.setExecutor(new CmdGraylist());
         cmdInfo.setExecutor(new CmdInfo());

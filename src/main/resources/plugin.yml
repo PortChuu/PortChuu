@@ -11,6 +11,10 @@ commands:
   portchuu:
     description: Port Chuu informational command
     usage: /portchuu
+  firstseen:
+    description: Get the first login of a player
+    usage: /firstseen <player>
+    permission: portchuu.command.firstseen
   gamemode:
     aliases: [gm]
     description: /gamemode, but only for survival and spectator modes
@@ -57,6 +61,9 @@ permissions:
     default: true
     description: Allows players to manipulate/build on the world
   portchuu.chat.url:
+    default: true
+
+  portchuu.command.firstseen:
     default: true
 
   portchuu.command.gamemode:
