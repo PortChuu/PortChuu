@@ -37,6 +37,7 @@ public class CmdGraylist implements TabExecutor {
                 doGraylist(sender, args[1]);
             else if (args[0].equalsIgnoreCase(CHECK))
                 checkGraylist(sender, args[1]);
+            return true;
         }
 
         if (args.length == 0) {
