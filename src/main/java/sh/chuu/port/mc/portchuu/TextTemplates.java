@@ -41,7 +41,7 @@ public interface TextTemplates {
     }
 
     static boolean hasURL(String text) {
-        return text.matches("[^\\s.]+(\\.[^\\s.]+)+|https?://\\S+");
+        return text.matches("[^/\\s]+\\.[^/\\d\\s.]{2,}[^/]?\\S*|https?://\\S+");
     }
 
     static BaseComponent[] url(String spacedString, ChatColor linkColor) {
@@ -79,13 +79,14 @@ public interface TextTemplates {
     static void injectURLTruncatedSingle(ComponentBuilder cb, String url, ChatColor color) {
         String u = ChatColor.stripColor(url);
         String d;
-        int dslash = u.indexOf("//") + 1;
+        int dslash = u.indexOf("//") + 2;
+        int firstSlashI = u.indexOf("/", dslash);
 
         // Shorten URL text if too long
-        if (u.length() > 35) {
-            int first = u.indexOf("/", dslash) + (6 + url.length() - u.length());
+        if (u.length() > 35 && firstSlashI != -1) {
+            int first = firstSlashI + (6 + url.length() - u.length());
             if (url.charAt(first - 1) == '\u00A7') first++;
-            int last = url.length() - 6;
+            int last = url.length() - 10;
             if (url.charAt(last - 1) == '\u00A7') last--;
             if (first <= last) d = url.substring(0, first) + "\u2026" + url.substring(last);
             else d = url;
