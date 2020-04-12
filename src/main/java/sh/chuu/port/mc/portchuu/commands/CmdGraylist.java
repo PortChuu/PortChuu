@@ -43,10 +43,9 @@ public class CmdGraylist implements TabExecutor {
 
         if (args.length == 0) {
             checkGraylist(sender, null);
+            return true;
         }
-
         checkGraylist(sender, args[0]);
-
         return true;
     }
 
