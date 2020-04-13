@@ -71,8 +71,6 @@ public class PortChuu extends JavaPlugin {
         nicknameModule = new NicknameModule(this);
         permissionsModule = new PermissionsModule(this);
 
-        if (getConfig().getBoolean("worldmod.thunder-fire", true))
-            getServer().getPluginManager().registerEvents(new ListenerDisableThunderFire(), this);
         getServer().getPluginManager().registerEvents(pe, this);
         getServer().getPluginManager().registerEvents(new ListenerBuildPermission(), this);
         getServer().getPluginManager().registerEvents(new ListenerJoinLeaveMod(), this);
