@@ -97,6 +97,8 @@ public class PortChuu extends JavaPlugin {
         cmdSeen.setExecutor(new CmdSeen());
         cmdTeleport.setExecutor(new CmdTeleport());
 
+        new TabListStatusModule();
+
         getConfig();
         reloadConfig();
         saveConfig();
