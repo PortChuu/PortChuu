@@ -58,7 +58,6 @@ public class CmdGraylist implements TabExecutor {
             }
 
             module.graylist(uuid).thenAcceptAsync(success -> {
-                PortChuu.getInstance().getLogger().info("Hit 1");
                 if (success)
                     broadcastGraylist(name);
                 else
