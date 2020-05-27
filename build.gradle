@@ -6,7 +6,7 @@ plugins {
 group 'sh.chuu.port.mc.portchuu'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11.0
 
 repositories {
     maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
