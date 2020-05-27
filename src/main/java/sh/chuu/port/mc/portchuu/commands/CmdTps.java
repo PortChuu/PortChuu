@@ -25,17 +25,11 @@ public class CmdTps implements TabExecutor {
         TextComponent tpsText = new TextComponent("TPS: ");
         tpsText.setColor(ChatColor.GOLD);
         boolean isConsole = sender instanceof ConsoleCommandSender;
+        boolean canRam = sender.hasPermission(RAM_PERM);
 
-        TextComponent[] tps = tps(isConsole ? "; " : "\n");
+        TextComponent[] tps = tps(isConsole ? "; " : canRam ? "\n" : "");
 
-        if (!sender.hasPermission(RAM_PERM)) {
-            sender.sendMessage(new TextComponent[]{
-                    tpsText,
-                    tps[0],
-                    tps[1],
-                    tps[2]
-            });
-        } else {
+        if (canRam) {
             TextComponent ramText = new TextComponent("RAM: [");
             TextComponent ramTextEnd = new TextComponent("]");
             ramText.setColor(ChatColor.GOLD);
@@ -52,8 +46,14 @@ public class CmdTps implements TabExecutor {
                     ram,
                     ramTextEnd
             });
+        } else {
+            sender.sendMessage(new TextComponent[]{
+                    tpsText,
+                    tps[0],
+                    tps[1],
+                    tps[2]
+            });
         }
-
         return true;
     }
 

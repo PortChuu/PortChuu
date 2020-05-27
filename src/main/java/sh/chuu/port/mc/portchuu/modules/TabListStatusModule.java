@@ -65,6 +65,8 @@ public class TabListStatusModule {
     }
 
     private String direction(float yaw) {
+        return "Compass WIP";
+/*
         if (yaw >= -45.0 || yaw <= -315.0)
             return "S, +z";
         else if (yaw > -135.0)
@@ -73,5 +75,6 @@ public class TabListStatusModule {
             return "N, -z";
         else
             return "W, -x";
+*/
     }
 }
