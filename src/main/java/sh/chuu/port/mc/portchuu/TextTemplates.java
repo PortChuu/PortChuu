@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -219,5 +220,22 @@ public interface TextTemplates {
         d.setTimeZone(zone);
         ret.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT, (new ComponentBuilder(d.format(time))).create()));
         return ret;
+    }
+
+    static ChatColor colorTPS(double tps) {
+        return tps >= 18.0 ? ChatColor.GREEN : tps >= 15.0 ? ChatColor.YELLOW : ChatColor.RED;
+    }
+
+    static String humanReadableBytes(long bytes) {
+        DecimalFormat f = new DecimalFormat("#.##");
+        if (bytes < 0x400L)
+            return bytes + "";
+        if (bytes < 0x100000L)
+            return f.format(((double)bytes)/0x400L) + "k";
+        if (bytes < 0x40000000L)
+            return f.format(((double)bytes)/0x100000L) + "M";
+        if (bytes < 0x10000000000L)
+            return f.format(((double)bytes)/0x40000000L) + "G";
+        return f.format(((double)bytes)/0x10000000000L) + "T";
     }
 }

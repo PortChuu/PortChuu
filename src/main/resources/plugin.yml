@@ -56,6 +56,11 @@ commands:
     description: /teleport, but with different dimensions
     usage: /teleport [entity] <entity|location>
     permission: portchuu.command.teleport
+  tps:
+    aliases: [ram]
+    description: Outputs TPS and RAM usage
+    usage: /tps
+    permission: portchuu.command.tps
 
 permissions:
   portchuu.reload:
@@ -149,3 +154,10 @@ permissions:
     default: op
     children:
       - portchuu.command.teleport
+
+  portchuu.command.tps:
+    default: op
+  portchuu.command.tps.ram:
+    default: op
+    children:
+      - portchuu.command.tps

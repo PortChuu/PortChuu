@@ -85,6 +85,7 @@ public class PortChuu extends JavaPlugin {
         PluginCommand cmdReport = getCommand("report");
         PluginCommand cmdSeen = getCommand("seen");
         PluginCommand cmdTeleport = getCommand("teleport");
+        PluginCommand cmdTps = getCommand("tps");
 
         cmdFirstSeen.setExecutor(new CmdFirstSeen());
         cmdGamemode.setExecutor(new CmdGamemode());
@@ -96,6 +97,7 @@ public class PortChuu extends JavaPlugin {
         cmdReport.setExecutor(new CmdReport());
         cmdSeen.setExecutor(new CmdSeen());
         cmdTeleport.setExecutor(new CmdTeleport());
+        cmdTps.setExecutor(new CmdTps());
 
         new TabListStatusModule();
 
