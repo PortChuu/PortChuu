@@ -65,16 +65,17 @@ public class TabListStatusModule {
     }
 
     private String direction(float yaw) {
-        return "Compass WIP";
-/*
-        if (yaw >= -45.0 || yaw <= -315.0)
+        // For some reason, bukkit yaw is between -360 and 360.
+        if (yaw < 0)
+            yaw = (yaw + 360) % 360;
+
+        if (yaw <= 45.0 || yaw >= 315.0)
             return "S, +z";
-        else if (yaw > -135.0)
-            return "E, +x";
-        else if (yaw >= -225.0)
+        else if (yaw < 135.0)
+            return "W, -x";
+        else if (yaw <= 225.0)
             return "N, -z";
         else
-            return "W, -x";
-*/
+            return "E, +x";
     }
 }
