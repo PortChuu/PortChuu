@@ -26,7 +26,7 @@ commands:
     usage: /graylist [player]
     permission: portchuu.command.graylist
   info:
-    aliases: [rules, links]
+    aliases: [rules, links, map]
     description: Shows the server info as a book
     usage: /info
     permission: portchuu.command.info
