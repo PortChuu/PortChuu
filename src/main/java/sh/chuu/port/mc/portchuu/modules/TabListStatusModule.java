@@ -6,37 +6,72 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import sh.chuu.port.mc.portchuu.PortChuu;
+import sh.chuu.port.mc.portchuu.TextTemplates;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class TabListStatusModule {
+    private final TextComponent time = new TextComponent();
+    private final TextComponent tps = new TextComponent();
+    private final TextComponent coords = new TextComponent();
+    private final TextComponent direction = new TextComponent();
+    private final TextComponent[] header;
+    private final TextComponent[] footer;
+    private final SimpleDateFormat dformat = new SimpleDateFormat("hh:mm");
 
     public TabListStatusModule() {
         PortChuu plugin = PortChuu.getInstance();
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::update, 20L, 20L);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::update, 20L, 10L);
+
+        header = new TextComponent[]{
+                new TextComponent("Port Chuu\n"),
+                time
+        };
+        header[0].setColor(ChatColor.AQUA);
+        header[0].setBold(true);
+        time.setColor(ChatColor.GRAY);
+
+        footer = new TextComponent[]{
+                new TextComponent("TPS: "),
+                tps,
+                new TextComponent("\n"),
+                coords,
+                new TextComponent(" ("),
+                direction,
+                new TextComponent(")")
+        };
+        footer[0].setColor(ChatColor.GOLD);
+        coords.setColor(ChatColor.GRAY);
+        footer[4].setColor(ChatColor.DARK_GRAY);
+        direction.setColor(ChatColor.GRAY);
+        footer[6].setColor(ChatColor.DARK_GRAY);
     }
 
     private void update() {
-        double tps = Bukkit.getTPS()[0];
-        String t = new DecimalFormat("#.0#").format(tps);
-        TextComponent[] footer = {
-                new TextComponent("TPS: "),
-                new TextComponent(t),
-                new TextComponent(" | "),
-                new TextComponent("XYZ: "),
-                new TextComponent()
-        };
+        time.setText(dformat.format(new Date()));
 
-        footer[0].setColor(ChatColor.GOLD);
-        footer[1].setColor(tps >= 18.0 ? ChatColor.GREEN : tps >= 15.0 ? ChatColor.YELLOW : ChatColor.RED);
-        footer[2].setColor(ChatColor.DARK_GRAY);
-        footer[3].setColor(ChatColor.GRAY);
-        footer[4].setColor(ChatColor.WHITE);
+        double tpsv = Bukkit.getTPS()[0];
+        tps.setText(new DecimalFormat("#.0#").format(tpsv));
+        tps.setColor(TextTemplates.colorTPS(tpsv));
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             Location loc = p.getLocation();
-            footer[4].setText(loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
-            p.setPlayerListHeaderFooter(null, footer);
+            coords.setText(loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
+            direction.setText(direction(loc.getYaw()));
+            p.setPlayerListHeaderFooter(header, footer);
         }
+    }
+
+    private String direction(float yaw) {
+        if (yaw >= -45.0 || yaw <= -315.0)
+            return "S, +z";
+        else if (yaw > -135.0)
+            return "E, +x";
+        else if (yaw >= -225.0)
+            return "N, -z";
+        else
+            return "W, -x";
     }
 }
