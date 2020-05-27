@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabExecutor;
+import sh.chuu.port.mc.portchuu.PortChuu;
 import sh.chuu.port.mc.portchuu.TextTemplates;
 
 import java.text.DecimalFormat;
@@ -17,26 +18,27 @@ import java.util.List;
 
 public class CmdTps implements TabExecutor {
     private static final String RAM_PERM = "portchuu.command.tps.ram";
+    private static final String RAM = "ram";
     private static final String BAR100 = "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||";
     private static final String BAR40 = "||||||||||||||||||||||||||||||||||||||||";
+    private final PortChuu plugin = PortChuu.getInstance();
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        TextComponent tpsText = new TextComponent("TPS: ");
-        tpsText.setColor(ChatColor.GOLD);
         boolean isConsole = sender instanceof ConsoleCommandSender;
         boolean canRam = sender.hasPermission(RAM_PERM);
 
-        TextComponent[] tps = tps(isConsole ? "; " : canRam ? "\n" : "");
+        TextComponent tpsText = new TextComponent("TPS: ");
+        tpsText.setColor(ChatColor.GOLD);
 
-        if (canRam) {
+        if (canRam && (label.equalsIgnoreCase(RAM) || ((args.length != 0) && args[0].equalsIgnoreCase(RAM)))) {
+            TextComponent[] tps = tps(isConsole ? "; " : "\n");
             TextComponent ramText = new TextComponent("RAM: [");
             TextComponent ramTextEnd = new TextComponent("] ");
             ramText.setColor(ChatColor.GOLD);
             ramTextEnd.setColor(ChatColor.GOLD);
 
             TextComponent[] ram = ram(isConsole ? BAR40 : BAR100);
-
             sender.sendMessage(new TextComponent[]{
                     tpsText,
                     tps[0],
@@ -48,6 +50,7 @@ public class CmdTps implements TabExecutor {
                     ram[1]
             });
         } else {
+            TextComponent[] tps = tps("");
             sender.sendMessage(new TextComponent[]{
                     tpsText,
                     tps[0],
@@ -59,8 +62,10 @@ public class CmdTps implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-        return ImmutableList.of();
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        if (label.equalsIgnoreCase(RAM) || !sender.hasPermission(RAM_PERM) || args.length > 1 || !RAM.startsWith(args[0].toLowerCase()))
+            return ImmutableList.of();
+        return ImmutableList.of(RAM);
     }
 
     private TextComponent[] tps(String last) {
@@ -100,7 +105,7 @@ public class CmdTps implements TabExecutor {
 
         BaseComponent[] hover = {
                 new TextComponent("Xmx: " + maxHuman
-                        + "\nAllocated: " + TextTemplates.humanReadableBytes(allocated) + " (" + f.format(pctUsed * 100) + "%)"
+                        + "\nAllocated: " + TextTemplates.humanReadableBytes(allocated) + " (" + f.format(pctAllocated * 100) + "%)"
                         + "\nUsed: "),
                 new TextComponent(usedHuman + " (" + f.format(pctUsed * 100) + "%)" + "\n"),
                 new TextComponent("Free: "),

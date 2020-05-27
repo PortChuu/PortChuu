@@ -58,7 +58,7 @@ commands:
     permission: portchuu.command.teleport
   tps:
     aliases: [ram]
-    description: Outputs TPS and RAM usage
+    description: Outputs TPS (and RAM usage)
     usage: /tps
     permission: portchuu.command.tps
 
@@ -158,6 +158,7 @@ permissions:
   portchuu.command.tps:
     default: op
   portchuu.command.tps.ram:
+    description: Allows viewing RAM on /tps.  Can get costly since this runs garbage collector to get the exact RAM usage.
     default: op
     children:
       - portchuu.command.tps
