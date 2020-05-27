@@ -31,11 +31,11 @@ public class CmdTps implements TabExecutor {
 
         if (canRam) {
             TextComponent ramText = new TextComponent("RAM: [");
-            TextComponent ramTextEnd = new TextComponent("]");
+            TextComponent ramTextEnd = new TextComponent("] ");
             ramText.setColor(ChatColor.GOLD);
             ramTextEnd.setColor(ChatColor.GOLD);
 
-            TextComponent ram = ram(isConsole ? BAR40 : BAR100);
+            TextComponent[] ram = ram(isConsole ? BAR40 : BAR100);
 
             sender.sendMessage(new TextComponent[]{
                     tpsText,
@@ -43,8 +43,9 @@ public class CmdTps implements TabExecutor {
                     tps[1],
                     tps[2],
                     ramText,
-                    ram,
-                    ramTextEnd
+                    ram[0],
+                    ramTextEnd,
+                    ram[1]
             });
         } else {
             sender.sendMessage(new TextComponent[]{
@@ -78,23 +79,30 @@ public class CmdTps implements TabExecutor {
         return new TextComponent[]{tps1m, tps5m, tps15m};
     }
 
-    private TextComponent ram(String bar) {
+    private TextComponent[] ram(String bar) {
         DecimalFormat f = new DecimalFormat("#.0");
         Runtime r = Runtime.getRuntime();
-        long total = r.totalMemory(); // anywhere between Xms and Xmx
-        long used = r.freeMemory(); // used
+        r.gc();
+        long allocated = r.totalMemory(); // anywhere between Xms and Xmx
+        long free = r.freeMemory(); // free
         long max = r.maxMemory(); // Xmx
-        long free = max - total; // Xmx
+        long used = allocated - free;
         float pctUsed = ((float) used)/max;
-        float pctTotal = ((float) total)/max;
+        float pctAllocated = ((float) allocated)/max;
         float pctFree = 1 - pctUsed;
         ChatColor color = pctUsed < 0.85 ? ChatColor.GREEN : pctUsed < 0.96 ? ChatColor.YELLOW : ChatColor.RED;
 
+        String maxHuman = TextTemplates.humanReadableBytes(max);
+        String usedHuman = TextTemplates.humanReadableBytes(used);
+
+        TextComponent rFree = new TextComponent(usedHuman + "/" + maxHuman);
+        rFree.setColor(color);
+
         BaseComponent[] hover = {
-                new TextComponent("Xmx: " + TextTemplates.humanReadableBytes(max)
-                        + "\nAllocated: " + TextTemplates.humanReadableBytes(total)
+                new TextComponent("Xmx: " + maxHuman
+                        + "\nAllocated: " + TextTemplates.humanReadableBytes(allocated) + " (" + f.format(pctUsed * 100) + "%)"
                         + "\nUsed: "),
-                new TextComponent(TextTemplates.humanReadableBytes(used) + " (" + f.format(pctUsed * 100) + "%)" + "\n"),
+                new TextComponent(usedHuman + " (" + f.format(pctUsed * 100) + "%)" + "\n"),
                 new TextComponent("Free: "),
                 new TextComponent(TextTemplates.humanReadableBytes(free) + " (" + f.format(pctFree * 100) + "%)")
         };
@@ -103,7 +111,7 @@ public class CmdTps implements TabExecutor {
         hover[3].setColor(color);
 
         int pt1 = (int) (pctUsed * bar.length());
-        int pt2 = (int) (pctTotal * bar.length());
+        int pt2 = (int) (pctAllocated * bar.length());
 
         TextComponent r1 = new TextComponent(bar.substring(0, pt1));
         TextComponent r2 = new TextComponent(bar.substring(pt1, pt2));
@@ -115,6 +123,6 @@ public class CmdTps implements TabExecutor {
         if (!r3.getText().isEmpty()) // can be empty if full Xmx is being utilized
             r1.addExtra(r3);
         r1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover));
-        return r1;
+        return new TextComponent[]{r1, rFree};
     }
 }
