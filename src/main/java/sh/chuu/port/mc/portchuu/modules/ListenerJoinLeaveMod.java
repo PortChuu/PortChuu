@@ -44,13 +44,14 @@ public class ListenerJoinLeaveMod implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent ev) {
         Player p = ev.getPlayer();
+        Long lastLogin = lastseen.remove(p.getUniqueId());
         nicknameModule.initPlayerNick(p);
         BaseComponent name = TextTemplates.createPlayerTooltipLegacy(p.getDisplayName(), p.getName(), p.getUniqueId().toString());
 
-        if (p.hasPlayedBefore()) {
-            int diff = (int) (System.currentTimeMillis() - lastseen.remove(p.getUniqueId())) / 1000;
-            if (diff > 10)
-                p.sendMessage(welcomeBack(p.getLastLogin(), diff, TextTemplates.locale((p.getLocale()))));
+        if (p.hasPlayedBefore() || lastLogin != null) {
+            long diff = System.currentTimeMillis() - lastLogin;
+            if (diff > 10000)
+                p.sendMessage(welcomeBack(p.getLastLogin(), diff/1000, TextTemplates.locale((p.getLocale()))));
         } else {
             p.sendMessage(newPlayer(name));
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
