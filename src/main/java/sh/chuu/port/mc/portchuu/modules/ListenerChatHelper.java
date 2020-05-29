@@ -36,7 +36,6 @@ public class ListenerChatHelper implements Listener {
 
     public ListenerChatHelper(PortChuu plugin, String chatFormat) {
         this.plugin = plugin;
-        this.chatFormat = chatFormat;
 
         if (chatFormat != null && chatFormat.indexOf(ChatColor.COLOR_CHAR) != -1) {
             int pi = chatFormat.indexOf("%pre%");
@@ -44,6 +43,7 @@ public class ListenerChatHelper implements Listener {
             int si = chatFormat.indexOf("%suf%");
             int mi = chatFormat.indexOf("%msg%");
             if (ni == -1 || mi == -1) {
+                this.chatFormat = chatFormat;
                 this.chatPreColor = null;
                 this.chatNameColor = null;
                 this.chatSufColor = null;
@@ -145,8 +145,16 @@ public class ListenerChatHelper implements Listener {
                 template.removeIf(tc -> ((TextComponent) tc).getText().length() == 0);
             }
             this.chatComponents = template.toArray(new BaseComponent[0]);
-            this.chatMsg.setText("");
+            TextComponent chatName = ((TextComponent) this.chatComponents[this.chatNamePos]);
+            TextComponent chatPre = ((TextComponent) this.chatComponents[this.chatPrePos]);
+            if (chatName != null)
+                chatName.setText("%1$s");
+            if (chatPre != null)
+                chatPre.setText("[Minecraft] ");
+            this.chatMsg.setText("%2$s");
+            this.chatFormat = TextComponent.toLegacyText(chatComponents);
         } else {
+            this.chatFormat = null;
             this.chatPreColor = null;
             this.chatNameColor = null;
             this.chatSufColor = null;
@@ -188,11 +196,11 @@ public class ListenerChatHelper implements Listener {
         getChatComponents(name, pre, suf, ev.getMessage());
 
         for (Player pl : ev.getRecipients()) {
-            //noinspection deprecation
+            //noinspection deprecation - I still use "Chat" type for chat messages
             pl.sendMessage(ChatMessageType.CHAT, chatComponents);
         }
-        ev.setFormat(TextComponent.toLegacyText(chatComponents));
         ev.getRecipients().clear();
+        ev.setFormat(chatFormat);
     }
 
     public BaseComponent[] getChatComponents(BaseComponent name, String pre, String suf, String msg) {
