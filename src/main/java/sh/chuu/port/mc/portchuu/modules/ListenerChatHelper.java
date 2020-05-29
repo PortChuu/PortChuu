@@ -153,6 +153,7 @@ public class ListenerChatHelper implements Listener {
                 chatPre.setText("[Minecraft] ");
             this.chatMsg.setText("%2$s");
             this.chatFormat = TextComponent.toLegacyText(chatComponents);
+            this.chatMsg.setText("");
         } else {
             this.chatFormat = null;
             this.chatPreColor = null;
