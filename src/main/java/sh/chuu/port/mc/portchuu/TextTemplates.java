@@ -223,7 +223,11 @@ public interface TextTemplates {
     }
 
     static ChatColor colorTPS(double tps) {
-        return tps >= 18.0 ? ChatColor.GREEN : tps >= 15.0 ? ChatColor.YELLOW : ChatColor.RED;
+        return tps >= 20.1 ? ChatColor.AQUA : tps >= 18.0 ? ChatColor.GREEN : tps >= 15.0 ? ChatColor.YELLOW : ChatColor.RED;
+    }
+
+    static ChatColor colorPing(int ping) {
+        return ping <= 60 ? ChatColor.AQUA : ping <= 150 ? ChatColor.GREEN : ping <= 400 ? ChatColor.YELLOW : ChatColor.RED;
     }
 
     static String humanReadableBytes(long bytes) {

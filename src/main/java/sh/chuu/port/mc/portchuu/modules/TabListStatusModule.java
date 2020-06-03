@@ -15,11 +15,14 @@ import java.util.Date;
 public class TabListStatusModule {
     private final TextComponent time = new TextComponent();
     private final TextComponent tps = new TextComponent();
+    private final TextComponent ping = new TextComponent();
     private final TextComponent coords = new TextComponent();
     private final TextComponent direction = new TextComponent();
     private final TextComponent[] header;
     private final TextComponent[] footer;
-    private final SimpleDateFormat dformat = new SimpleDateFormat("hh:mm");
+    private final SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
+    private final DecimalFormat tpsFormat = new DecimalFormat("#.0#");
+
 
     public TabListStatusModule() {
         PortChuu plugin = PortChuu.getInstance();
@@ -36,27 +39,35 @@ public class TabListStatusModule {
         footer = new TextComponent[]{
                 new TextComponent("TPS: "),
                 tps,
-                new TextComponent("\n"),
+                new TextComponent(" | "),
+                new TextComponent("Ping: "),
+                ping,
                 coords,
                 new TextComponent(" ("),
                 direction,
                 new TextComponent(")")
         };
         footer[0].setColor(ChatColor.GOLD);
+        footer[2].setColor(ChatColor.DARK_GRAY);
+        footer[3].setColor(ChatColor.DARK_AQUA);
         coords.setColor(ChatColor.GRAY);
-        footer[4].setColor(ChatColor.DARK_GRAY);
-        direction.setColor(ChatColor.GRAY);
         footer[6].setColor(ChatColor.DARK_GRAY);
+        direction.setColor(ChatColor.GRAY);
+        footer[8].setColor(ChatColor.DARK_GRAY);
     }
 
     private void update() {
-        time.setText(dformat.format(new Date()));
+        time.setText(timeFormat.format(new Date()));
 
         double tpsv = Bukkit.getTPS()[0];
-        tps.setText(new DecimalFormat("#.0#").format(tpsv));
+        tps.setText(tpsFormat.format(tpsv));
         tps.setColor(TextTemplates.colorTPS(tpsv));
 
         for (Player p : Bukkit.getOnlinePlayers()) {
+            int np = p.spigot().getPing();
+            ping.setText(np + "ms\n");
+            ping.setColor(TextTemplates.colorPing(np));
+
             Location loc = p.getLocation();
             coords.setText(loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
             direction.setText(direction(loc.getYaw()));

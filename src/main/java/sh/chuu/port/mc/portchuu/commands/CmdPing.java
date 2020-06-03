@@ -47,8 +47,9 @@ public class CmdPing implements TabExecutor {
             a.addExtra("'s ping: ");
         }
 
-        TextComponent b = new TextComponent(target.spigot().getPing() + "ms");
-        b.setColor(ChatColor.WHITE);
+        int ping = target.spigot().getPing();
+        TextComponent b = new TextComponent(ping + "ms");
+        b.setColor(TextTemplates.colorPing(ping));
         a.addExtra(b);
         if (sender == target)
             sender.sendMessage(a);
