@@ -13,14 +13,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TabListStatusModule {
-    private final TextComponent time = new TextComponent();
+    private final TextComponent hour = new TextComponent();
+    private final TextComponent colon = new TextComponent(":");
+    private final TextComponent minute = new TextComponent();
     private final TextComponent tps = new TextComponent();
     private final TextComponent ping = new TextComponent();
     private final TextComponent coords = new TextComponent();
     private final TextComponent direction = new TextComponent();
     private final TextComponent[] header;
     private final TextComponent[] footer;
-    private final SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
+    private final SimpleDateFormat[] timeFormat = {new SimpleDateFormat("hh"), new SimpleDateFormat("mm")};
     private final DecimalFormat tpsFormat = new DecimalFormat("#.0#");
 
 
@@ -30,11 +32,13 @@ public class TabListStatusModule {
 
         header = new TextComponent[]{
                 new TextComponent("Port Chuu\n"),
-                time
+                hour, colon, minute
         };
         header[0].setColor(ChatColor.AQUA);
         header[0].setBold(true);
-        time.setColor(ChatColor.GRAY);
+        hour.setColor(ChatColor.GRAY);
+        colon.setColor(ChatColor.GRAY);
+        minute.setColor(ChatColor.GRAY);
 
         footer = new TextComponent[]{
                 new TextComponent("TPS: "),
@@ -57,7 +61,10 @@ public class TabListStatusModule {
     }
 
     private void update() {
-        time.setText(timeFormat.format(new Date()));
+        Date d = new Date();
+        hour.setText(timeFormat[0].format(d));
+        minute.setText(timeFormat[1].format(d));
+        colon.setColor(colon.getColor() == ChatColor.GRAY ? ChatColor.BLACK : ChatColor.GRAY);
 
         double tpsv = Bukkit.getTPS()[0];
         tps.setText(tpsFormat.format(tpsv));
