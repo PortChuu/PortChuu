@@ -28,10 +28,12 @@ public class NicknameModule {
     private PortChuu plugin;
     private File configFile;
     private YamlConfiguration config;
+    private final String nickPrefix;
     private Map<UUID, String> nickCache = new HashMap<>(); // Only loads the nickname of the player currently online
 
-    public NicknameModule(PortChuu plugin) {
+    public NicknameModule(PortChuu plugin, String nickPrefix) {
         this.plugin = plugin;
+        this.nickPrefix = nickPrefix;
         this.configFile = new File(plugin.getDataFolder(), "nicknames.yml");
         if (!configFile.exists()) {
             plugin.saveResource("nicknames.yml", false);
@@ -65,24 +67,26 @@ public class NicknameModule {
     }
 
     public void applyNick(Player p, String nick) {
-        p.setDisplayName(nick);
+        String full = nick == null ? null : nickPrefix + nick;
+        p.setDisplayName(full);
 
-        StringBuilder pln = new StringBuilder();
-        LuckPerms lp = plugin.getLpAPI();
-        if (lp != null) {
-            CachedMetaData md = lp.getUserManager().getUser(p.getUniqueId()).getCachedData().getMetaData(QueryOptions.defaultContextualOptions());
-            String pre = md.getPrefix();
-            String suf = md.getSuffix();
-            if (pre != null)
-                pln.append(ChatColor.translateAlternateColorCodes('&', pre));
-            pln.append(nick);
-            if (suf != null)
-                pln.append(ChatColor.translateAlternateColorCodes('&', suf));
-        } else {
-            pln.append(nick);
-        }
+//        StringBuilder pln = new StringBuilder();
+//        LuckPerms lp = plugin.getLpAPI();
+//        if (lp != null) {
+//            CachedMetaData md = lp.getUserManager().getUser(p.getUniqueId()).getCachedData().getMetaData(QueryOptions.defaultContextualOptions());
+//            String pre = md.getPrefix();
+//            String suf = md.getSuffix();
+//            if (pre != null)
+//                pln.append(ChatColor.translateAlternateColorCodes('&', pre));
+//            pln.append(full);
+//            if (suf != null)
+//                pln.append(ChatColor.translateAlternateColorCodes('&', suf));
+//        } else {
+//            pln.append(full);
+//        }
 
-        p.setPlayerListName(pln.toString());
+        //p.setPlayerListName(pln.toString());
+        p.setPlayerListName(full);
     }
 
     public String setNick(OfflinePlayer p, String nick) {

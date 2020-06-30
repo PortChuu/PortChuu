@@ -68,7 +68,8 @@ public class PortChuu extends JavaPlugin {
         else
             getLogger().warning("DiscordSRV not enabled!");
 
-        nicknameModule = new NicknameModule(this);
+        String nickPrefix = getConfig().getString("nickname-prefix", "\u00a7b~\u00a7r");
+        nicknameModule = new NicknameModule(this, nickPrefix);
         permissionsModule = new PermissionsModule(this);
 
         getServer().getPluginManager().registerEvents(pe, this);

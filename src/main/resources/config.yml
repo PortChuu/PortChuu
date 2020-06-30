@@ -6,6 +6,7 @@
 chat:
   reformat: false
   format: '<%pre%%name%%suf%> %msg%'
+
 playerlist:
   reformat: true
   format: '%pre%%name%%suf%'
@@ -13,3 +14,5 @@ playerlist:
 graylist:
   group: graylist
   track: graylist
+
+nickname-prefix: '§b~§r'
