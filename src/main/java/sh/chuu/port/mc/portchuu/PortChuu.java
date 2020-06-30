@@ -73,6 +73,7 @@ public class PortChuu extends JavaPlugin {
         permissionsModule = new PermissionsModule(this);
 
         getServer().getPluginManager().registerEvents(pe, this);
+        getServer().getPluginManager().registerEvents(new ListenerMentionEvents(), this);
         getServer().getPluginManager().registerEvents(new ListenerBuildPermission(), this);
         getServer().getPluginManager().registerEvents(new ListenerJoinLeaveMod(), this);
 

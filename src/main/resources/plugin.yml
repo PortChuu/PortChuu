@@ -2,10 +2,10 @@ name: PortChuu
 main: sh.chuu.port.mc.portchuu.PortChuu
 version: @version@
 description: Port Chuu Minecraft Server Plugin
-api-version: 1.15
+api-version: 1.16
 author: Simon Chuu
 website: https://port.chuu.sh
-softdepend: [LuckPerms, ProtocolLib, DiscordSRV]
+softdepend: [LuckPerms, ProtocolLib, DiscordSRV, EssentialsX]
 
 commands:
   portchuu:
