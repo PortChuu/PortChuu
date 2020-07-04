@@ -14,10 +14,11 @@ repositories {
     maven { url = 'http://repo.dmulloy2.net/nexus/repository/public/' } // ProtocolLib
     maven { url = 'https://nexus.scarsz.me/content/groups/public/' } // DiscordSRV
     maven { url = 'https://nexus.vankka.dev/repository/maven-public/' } // DiscordSRV "MCDiscordReserializer"
+    maven { url = 'https://ci.ender.zone/plugin/repository/everything/' } // EssentialsX
     maven { url = 'https://papermc.io/repo/repository/maven-public/' }
     jcenter() // for JDA, for DiscordSRV
     mavenCentral()
-    flatDir { dirs 'libs' }
+    //flatDir { dirs 'libs' }
 }
 
 dependencies {
@@ -26,8 +27,7 @@ dependencies {
     compileOnly 'net.luckperms:api:5.0'
     compileOnly 'com.comphenix.protocol:ProtocolLib:4.5.1'
     compileOnly 'com.discordsrv:discordsrv:1.19.0'
-    compileOnly name: 'EssentialsX-2.17.2.135'
-    //testCompile group: 'junit', name: 'junit', version: '4.12'
+    compileOnly 'net.ess3:EssentialsX:2.17.2'
 }
 
 processResources {

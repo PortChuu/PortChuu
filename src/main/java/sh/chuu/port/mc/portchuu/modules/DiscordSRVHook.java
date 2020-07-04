@@ -32,7 +32,7 @@ public class DiscordSRVHook {
                 u.getUser().getName() + "#" + u.getUser().getDiscriminator(),
                 u.getId(),
                 u.getUser().isBot()
-        ), "&7[&3Discord&7] ", null, ev.getProcessedMessage());
+        ), "&7[&x&7&2&8&9&D&ADiscord&7] ", null, ev.getProcessedMessage());
 
         Bukkit.getConsoleSender().sendMessage(msg);
         for (Player p : Bukkit.getOnlinePlayers()) {
