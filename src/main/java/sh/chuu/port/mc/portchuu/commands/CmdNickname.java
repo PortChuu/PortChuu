@@ -120,7 +120,7 @@ public class CmdNickname implements TabExecutor {
         String newNick;
 
         if (nickColored.indexOf(ChatColor.COLOR_CHAR) != -1 && !sender.hasPermission(ALLSTYLE_PERM)) {
-            boolean color = sender.hasPermission(COLOR_PERM),
+            final boolean color = sender.hasPermission(COLOR_PERM),
                     multicolor = sender.hasPermission(MULTICOLOR_PERM),
                     bold = sender.hasPermission(BOLD_PERM),
                     italic = sender.hasPermission(ITALIC_PERM),
@@ -141,7 +141,7 @@ public class CmdNickname implements TabExecutor {
                 if (c == ChatColor.COLOR_CHAR) {
                     char c2 = charArray[++i];
 
-                    if (c2 >= '0' && c2 <= '9' || c2 >= 'A' && c2 <= 'F' || c2 >= 'a' && c2 <= 'f' || c2 == 'r') {
+                    if (c2 >= '0' && c2 <= '9' || c2 >= 'A' && c2 <= 'F' || c2 >= 'a' && c2 <= 'f' || c2 == 'R' || c2 == 'r' || c2 == 'X' || c2 == 'x') {
                         out.append(c);
                         if (multicolor) out.append(c2);
                         else out.append(mainColor);
