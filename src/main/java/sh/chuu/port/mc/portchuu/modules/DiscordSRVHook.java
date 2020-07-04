@@ -5,11 +5,14 @@ import github.scarsz.discordsrv.api.Subscribe;
 import github.scarsz.discordsrv.api.events.DiscordGuildMessagePostProcessEvent;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import sh.chuu.port.mc.portchuu.TextTemplates;
+
+import java.awt.*;
 
 public class DiscordSRVHook {
     private final ListenerChatHelper pe;
@@ -27,8 +30,10 @@ public class DiscordSRVHook {
     @Subscribe
     public void chatEvent(DiscordGuildMessagePostProcessEvent ev) {
         Member u = ev.getMember();
+        Color c = u.getColor();
+        String color = c == null ? "" : ChatColor.of(c).toString();
         BaseComponent[] msg = pe.getChatComponents(TextTemplates.createDiscordTooltip(
-                u.getEffectiveName(),
+                color + u.getEffectiveName(),
                 u.getUser().getName() + "#" + u.getUser().getDiscriminator(),
                 u.getId(),
                 u.getUser().isBot()
