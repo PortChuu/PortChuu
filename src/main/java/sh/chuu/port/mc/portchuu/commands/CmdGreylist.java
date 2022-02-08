@@ -13,15 +13,14 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import sh.chuu.port.mc.portchuu.PortChuu;
 import sh.chuu.port.mc.portchuu.TextTemplates;
-import sh.chuu.port.mc.portchuu.modules.DiscordSRVHook;
 import sh.chuu.port.mc.portchuu.modules.PermissionsModule;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CmdGraylist implements TabExecutor {
-    private static final String ADD_PERM = "portchuu.command.graylist.add";
-    private static final String GRAYLIST_URL = "https://port.chuu.sh/graylist";
+public class CmdGreylist implements TabExecutor {
+    private static final String ADD_PERM = "portchuu.command.greylist.add";
+    private static final String GREYLIST_URL = "https://port.chuu.sh/greylist";
     private static final String ADD = "add";
     private static final String CHECK = "check";
 
@@ -35,21 +34,21 @@ public class CmdGraylist implements TabExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase(ADD))
-                doGraylist(sender, args[1]);
+                doGreylist(sender, args[1]);
             else if (args[0].equalsIgnoreCase(CHECK))
-                checkGraylist(sender, args[1]);
+                checkGreylist(sender, args[1]);
             return true;
         }
 
         if (args.length == 0) {
-            checkGraylist(sender, null);
+            checkGreylist(sender, null);
             return true;
         }
-        checkGraylist(sender, args[0]);
+        checkGreylist(sender, args[0]);
         return true;
     }
 
-    private void doGraylist(CommandSender sender, String name) {
+    private void doGreylist(CommandSender sender, String name) {
         module.getUUID(name).thenAcceptAsync(uuid -> {
             if (uuid == null) {
                 // UUID doesn't exist!
@@ -57,13 +56,13 @@ public class CmdGraylist implements TabExecutor {
                 return;
             }
 
-            module.graylist(uuid).thenAcceptAsync(success -> {
+            module.greylist(uuid).thenAcceptAsync(success -> {
                 if (success)
-                    broadcastGraylist(name);
+                    broadcastGreylist(name);
                 else
                     sender.sendMessage(new ComponentBuilder(name)
                             .color(ChatColor.WHITE)
-                            .append(" is already graylisted!")
+                            .append(" is already greylisted!")
                             .color(ChatColor.GRAY)
                             .create()
                     );
@@ -71,22 +70,22 @@ public class CmdGraylist implements TabExecutor {
         });
     }
 
-    private void checkGraylist(CommandSender sender, String name) {
+    private void checkGreylist(CommandSender sender, String name) {
         if (name == null) {
             // check for self
-            if (module.isGraylisted(sender))
+            if (module.isGreylisted(sender))
                 sender.sendMessage(new ComponentBuilder("You are ")
                         .color(ChatColor.GRAY)
-                        .append("graylisted")
+                        .append("greylisted")
                         .color(ChatColor.GREEN)
                         .create()
                 );
             else
-                sender.sendMessage(new ComponentBuilder("You're not graylisted. ")
+                sender.sendMessage(new ComponentBuilder("You're not greylisted. ")
                         .color(ChatColor.GRAY)
-                        .append("Apply for the graylist here!")
+                        .append("Apply for the greylist here!")
                         .color(ChatColor.AQUA)
-                        .event(new ClickEvent(ClickEvent.Action.OPEN_URL, GRAYLIST_URL))
+                        .event(new ClickEvent(ClickEvent.Action.OPEN_URL, GREYLIST_URL))
                         .create()
                 );
             return;
@@ -94,7 +93,7 @@ public class CmdGraylist implements TabExecutor {
         // check for other
         Player p = Bukkit.getPlayerExact(name);
         if (p != null) {
-            sendGraylistedMessage(sender, name, module.isGraylisted(p));
+            sendGreylistedMessage(sender, name, module.isGreylisted(p));
         } else {
             module.getUUID(name).thenAcceptAsync(uuid -> {
                 if (uuid == null) {
@@ -102,18 +101,18 @@ public class CmdGraylist implements TabExecutor {
                     sender.sendMessage(TextTemplates.unknownPlayer());
                     return;
                 }
-                module.isGraylisted(uuid).thenAccept(listed -> sendGraylistedMessage(sender, name, listed));
+                module.isGreylistedOffline(uuid).thenAccept(listed -> sendGreylistedMessage(sender, name, listed));
             });
         }
     }
 
-    private void sendGraylistedMessage(CommandSender sender, String name, boolean listed) {
+    private void sendGreylistedMessage(CommandSender sender, String name, boolean listed) {
         if (listed)
             sender.sendMessage(new ComponentBuilder(name)
                     .color(ChatColor.WHITE)
                     .append(" is ")
                     .color(ChatColor.GRAY)
-                    .append("graylisted")
+                    .append("greylisted")
                     .color(ChatColor.GREEN)
                     .create()
             );
@@ -124,22 +123,22 @@ public class CmdGraylist implements TabExecutor {
                     .color(ChatColor.GRAY)
                     .append("not")
                     .color(ChatColor.RED)
-                    .append(" graylisted")
+                    .append(" greylisted")
                     .color(ChatColor.GRAY)
                     .create()
             );
     }
 
-    private void broadcastGraylist(String name) {
-        BaseComponent send = new TextComponent(name + " is now graylisted!");
+    private void broadcastGreylist(String name) {
+        BaseComponent send = new TextComponent(name + " is now greylisted!");
         send.setColor(ChatColor.YELLOW);
         Bukkit.broadcast(send);
         Bukkit.getConsoleSender().sendMessage(send);
-        PortChuu.getInstance().sendToDiscord(":tada: **" + name + " is now graylisted!**");
+        PortChuu.getInstance().sendToDiscord(":tada: **" + name + " is now greylisted!**");
     }
 
     private BaseComponent usageAdd() {
-        String msg = "Usage: /graylist <add|check> <player>";
+        String msg = "Usage: /greylist <add|check> <player>";
         BaseComponent ret = new TextComponent(msg);
         ret.setColor(ChatColor.RED);
         return ret;

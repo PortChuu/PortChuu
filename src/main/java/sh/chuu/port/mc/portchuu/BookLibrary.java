@@ -72,7 +72,7 @@ public class BookLibrary {
                 .bold(true)
                 .append("===============\n")
                 .color(ChatColor.DARK_AQUA);
-        page5.append("todo: TELL SIMON TO FINISH THIS AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n", ComponentBuilder.FormatRetention.NONE);
+        page5.append("todo: TELL CHUU TO FINISH THIS AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n", ComponentBuilder.FormatRetention.NONE);
         footer(page5, 5);
         book.spigot().addPage(page5.create());
 

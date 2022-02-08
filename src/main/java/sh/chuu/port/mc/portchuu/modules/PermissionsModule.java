@@ -8,7 +8,7 @@ import net.luckperms.api.node.Node;
 import net.luckperms.api.node.types.InheritanceNode;
 import net.luckperms.api.query.QueryOptions;
 import net.luckperms.api.track.Track;
-import org.bukkit.permissions.Permissible;
+import org.bukkit.command.CommandSender;
 import sh.chuu.port.mc.portchuu.PortChuu;
 
 import javax.annotation.Nonnull;
@@ -30,7 +30,7 @@ public class PermissionsModule {
         return LuckPermsProvider.get();
     }
 
-    private boolean graylist(@Nonnull User user) {
+    private boolean greylist(@Nonnull User user) {
         if (user.getCachedData().getPermissionData(QueryOptions.nonContextual()).checkPermission(groupNode).asBoolean()) {
             // Already graylisted
             return false;
@@ -68,10 +68,10 @@ public class PermissionsModule {
         return api().getUserManager().lookupUniqueId(string);
     }
 
-    public CompletableFuture<Boolean> graylist(UUID uuid) {
+    public CompletableFuture<Boolean> greylist(UUID uuid) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         api().getUserManager().loadUser(uuid).thenAcceptAsync(user -> {
-            boolean success = graylist(user);
+            boolean success = greylist(user);
             future.complete(success);
 
             if (success) {
@@ -84,11 +84,11 @@ public class PermissionsModule {
         return future;
     }
 
-    public boolean isGraylisted(Permissible user) {
-        return user.hasPermission(groupNode);
+    public boolean isGreylisted(CommandSender p) {
+        return p.hasPermission(groupNode);
     }
 
-    public CompletableFuture<Boolean> isGraylisted(@Nonnull UUID uuid) {
+    public CompletableFuture<Boolean> isGreylistedOffline(@Nonnull UUID uuid) {
         CompletableFuture<Boolean> ret = new CompletableFuture<>();
         api().getUserManager().loadUser(uuid).thenAcceptAsync(user -> {
             ret.complete(user.getCachedData().getPermissionData(QueryOptions.nonContextual()).checkPermission(groupNode).asBoolean());

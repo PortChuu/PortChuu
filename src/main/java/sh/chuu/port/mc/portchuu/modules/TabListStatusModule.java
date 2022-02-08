@@ -18,7 +18,6 @@ public class TabListStatusModule {
     private final TextComponent minute = new TextComponent();
     private final TextComponent tps = new TextComponent();
     private final TextComponent ping = new TextComponent();
-    private final TextComponent coords = new TextComponent();
     private final TextComponent direction = new TextComponent();
     private final TextComponent[] header;
     private final TextComponent[] footer;
@@ -46,18 +45,16 @@ public class TabListStatusModule {
                 new TextComponent(" | "),
                 new TextComponent("Ping: "),
                 ping,
-                coords,
-                new TextComponent(" ("),
+                new TextComponent("- "),
                 direction,
-                new TextComponent(")")
+                new TextComponent(" -")
         };
         footer[0].setColor(ChatColor.GOLD);
         footer[2].setColor(ChatColor.DARK_GRAY);
         footer[3].setColor(ChatColor.DARK_AQUA);
-        coords.setColor(ChatColor.GRAY);
-        footer[6].setColor(ChatColor.DARK_GRAY);
+        footer[5].setColor(ChatColor.DARK_GRAY);
         direction.setColor(ChatColor.GRAY);
-        footer[8].setColor(ChatColor.DARK_GRAY);
+        footer[7].setColor(ChatColor.DARK_GRAY);
     }
 
     private void update() {
@@ -76,7 +73,6 @@ public class TabListStatusModule {
             ping.setColor(TextTemplates.colorPing(np));
 
             Location loc = p.getLocation();
-            coords.setText(loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
             direction.setText(direction(loc.getYaw()));
             p.setPlayerListHeaderFooter(header, footer);
         }
@@ -87,13 +83,21 @@ public class TabListStatusModule {
         if (yaw < 0)
             yaw = (yaw + 360) % 360;
 
-        if (yaw <= 45.0 || yaw >= 315.0)
+        if (yaw <= 22.5 || yaw >= 337.5)
             return "S, +z";
-        else if (yaw < 135.0)
+        else if (yaw < 67.5)
+            return "SW, -x +z";
+        else if (yaw <= 112.5)
             return "W, -x";
-        else if (yaw <= 225.0)
+        else if (yaw < 157.5)
+            return "NW, -x -z";
+        else if (yaw <= 202.5)
             return "N, -z";
-        else
+        else if (yaw < 247.0)
+            return "NE, +x -z ";
+        else if (yaw <= 292.0)
             return "E, +x";
+        else
+            return "SE, +x +z";
     }
 }

@@ -4,6 +4,7 @@
 # %suf% - suffix
 # %msg% - message
 chat:
+  enable: false
   reformat: false
   format: '<%pre%%name%%suf%> %msg%'
 
@@ -11,8 +12,7 @@ playerlist:
   reformat: true
   format: '%pre%%name%%suf%'
 
-graylist:
+greylist:
   group: graylist
   track: graylist
 
-nickname-prefix: '§b~§r'

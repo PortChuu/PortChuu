@@ -6,28 +6,33 @@ plugins {
 group 'sh.chuu.port.mc.portchuu'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 11.0
-
 repositories {
-    maven { url = 'https://libraries.minecraft.net/' }
-    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
-    maven { url = 'http://repo.dmulloy2.net/nexus/repository/public/' } // ProtocolLib
-    maven { url = 'https://nexus.scarsz.me/content/groups/public/' } // DiscordSRV
-    maven { url = 'https://nexus.vankka.dev/repository/maven-public/' } // DiscordSRV "MCDiscordReserializer"
-    maven { url = 'https://ci.ender.zone/plugin/repository/everything/' } // EssentialsX
-    maven { url = 'https://papermc.io/repo/repository/maven-public/' }
-    jcenter() // for JDA, for DiscordSRV
+    maven { url = uri("https://papermc.io/repo/repository/maven-public/")}
+    maven {
+        name = "m2-dv8tion"
+        url = "https://m2.dv8tion.net/releases"
+    } // DiscordSRV
+    maven { url = uri("https://nexus.scarsz.me/content/groups/public/")} // DiscordSRV
+    maven { url = uri("https://repo.dmulloy2.net/nexus/repository/public/")} // ProtocolLib
     mavenCentral()
     //flatDir { dirs 'libs' }
 }
 
 dependencies {
-    compileOnly 'com.destroystokyo.paper:paper-api:1.16.1-R0.1-SNAPSHOT'
-    //compile 'me.lucko:commodore:1.5'
-    compileOnly 'net.luckperms:api:5.0'
-    compileOnly 'com.comphenix.protocol:ProtocolLib:4.5.1'
-    compileOnly 'com.discordsrv:discordsrv:1.19.0'
-    compileOnly 'net.ess3:EssentialsX:2.17.2'
+    compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
+    compileOnly("io.github.waterfallmc:waterfall-api:1.18-R0.1-SNAPSHOT")
+    compileOnly("net.luckperms:api:5.3")
+    compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0-SNAPSHOT")
+    compileOnly("com.discordsrv:discordsrv:1.24.0") {
+        exclude group: "net.kyori", module: "adventure-platform-bukkit"
+    }
+    // TODO Add Forge maybe
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.8.2"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.8.2"
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
 processResources {

@@ -11,6 +11,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import sh.chuu.port.mc.portchuu.commands.*;
 import sh.chuu.port.mc.portchuu.modules.*;
 
@@ -18,17 +19,12 @@ import java.util.List;
 
 public class PortChuu extends JavaPlugin {
     private static PortChuu instance = null;
-    private NicknameModule nicknameModule = null;
     private PermissionsModule permissionsModule = null;
     private LuckPerms lpAPI = null;
     private DiscordSRVHook discordSRVHook = null;
 
     public static PortChuu getInstance() {
         return PortChuu.instance;
-    }
-
-    public NicknameModule getNicknameModule() {
-        return nicknameModule;
     }
 
     public PermissionsModule getPermissionsModule() {
@@ -61,44 +57,36 @@ public class PortChuu extends JavaPlugin {
         saveDefaultConfig();
 
         String chatFormat = getConfig().getBoolean("chat.reformat") ? getConfig().getString("chat.format") : null;
-        ListenerChatHelper pe = new ListenerChatHelper(this, chatFormat);
 
         if (isDiscordSRVLoaded())
-            DiscordSRV.api.subscribe(discordSRVHook = new DiscordSRVHook(pe));
+            DiscordSRV.api.subscribe(discordSRVHook = new DiscordSRVHook());
         else
             getLogger().warning("DiscordSRV not enabled!");
 
-        String nickPrefix = getConfig().getString("nickname-prefix", "\u00a7b~\u00a7r");
-        nicknameModule = new NicknameModule(this, nickPrefix);
         permissionsModule = new PermissionsModule(this);
 
-        getServer().getPluginManager().registerEvents(pe, this);
-        getServer().getPluginManager().registerEvents(new ListenerMentionEvents(), this);
         getServer().getPluginManager().registerEvents(new ListenerBuildPermission(), this);
         getServer().getPluginManager().registerEvents(new ListenerJoinLeaveMod(), this);
 
         PluginCommand cmdFirstSeen = getCommand("firstseen");
-        PluginCommand cmdGamemode = getCommand("gamemode");
-        PluginCommand cmdGraylist = getCommand("graylist");
-        PluginCommand cmdInfo = getCommand("info");
-        PluginCommand cmdKill = getCommand("kill");
-        PluginCommand cmdNickname = getCommand("nickname");
-        PluginCommand cmdPing = getCommand("ping");
-        PluginCommand cmdReport = getCommand("report");
-        PluginCommand cmdSeen = getCommand("seen");
-        PluginCommand cmdTeleport = getCommand("teleport");
-        PluginCommand cmdTps = getCommand("tps");
-
         cmdFirstSeen.setExecutor(new CmdFirstSeen());
+        PluginCommand cmdGamemode = getCommand("gamemode");
         cmdGamemode.setExecutor(new CmdGamemode());
-        cmdGraylist.setExecutor(new CmdGraylist());
+        PluginCommand cmdGraylist = getCommand("greylist");
+        cmdGraylist.setExecutor(new CmdGreylist());
+        PluginCommand cmdInfo = getCommand("info");
         cmdInfo.setExecutor(new CmdInfo());
+        PluginCommand cmdKill = getCommand("kill");
         cmdKill.setExecutor(new CmdKill());
-        cmdNickname.setExecutor(new CmdNickname(nicknameModule));
+        PluginCommand cmdPing = getCommand("ping");
         cmdPing.setExecutor(new CmdPing());
+        PluginCommand cmdReport = getCommand("report");
         cmdReport.setExecutor(new CmdReport());
+        PluginCommand cmdSeen = getCommand("seen");
         cmdSeen.setExecutor(new CmdSeen());
+        PluginCommand cmdTeleport = getCommand("teleport");
         cmdTeleport.setExecutor(new CmdTeleport());
+        PluginCommand cmdTps = getCommand("tps");
         cmdTps.setExecutor(new CmdTps());
 
         new TabListStatusModule();
@@ -111,14 +99,13 @@ public class PortChuu extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        nicknameModule.onDisable();
         if (isDiscordSRVLoaded())
             DiscordSRV.api.unsubscribe(discordSRVHook);
         PortChuu.instance = null;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         TextComponent msg = new TextComponent("Port Chuu Server Plugin v");
         msg.addExtra(getDescription().getVersion());
         msg.addExtra("\nCoded with <3");
@@ -128,7 +115,7 @@ public class PortChuu extends JavaPlugin {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         return ImmutableList.of();
     }
 

@@ -29,7 +29,6 @@ public class ListenerJoinLeaveMod implements Listener {
     private static final String GRAYLIST_URL = "https://port.chuu.sh/graylist";
     private static final String WEBSITE_URL = "https://port.chuu.sh/";
     private final PortChuu plugin = PortChuu.getInstance();
-    private final NicknameModule nicknameModule = plugin.getNicknameModule();
     private final PermissionsModule permModule = plugin.getPermissionsModule();
 
     private final HashMap<UUID, Long> lastseen = new LinkedHashMap<>();
@@ -45,7 +44,6 @@ public class ListenerJoinLeaveMod implements Listener {
     public void onJoin(PlayerJoinEvent ev) {
         Player p = ev.getPlayer();
         Long lastLogin = lastseen.remove(p.getUniqueId());
-        nicknameModule.initPlayerNick(p);
         BaseComponent name = TextTemplates.createPlayerTooltipLegacy(p.getDisplayName(), p.getName(), p.getUniqueId().toString());
 
         if (p.hasPlayedBefore() || lastLogin != null) {
@@ -60,7 +58,7 @@ public class ListenerJoinLeaveMod implements Listener {
             }, 20L);
         }
 
-        if (!permModule.isGraylisted(p))
+        if (!permModule.isGreylisted(p))
             p.sendMessage(needGraylist());
 
         String joinMsg = ev.getJoinMessage();
@@ -173,7 +171,6 @@ public class ListenerJoinLeaveMod implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLeave(PlayerQuitEvent ev) {
         Player p = ev.getPlayer();
-        nicknameModule.unloadPlayerNick(p);
         String testMsg = ev.getQuitMessage();
         if (testMsg != null && !testMsg.isEmpty()) {
             ev.setQuitMessage(null);

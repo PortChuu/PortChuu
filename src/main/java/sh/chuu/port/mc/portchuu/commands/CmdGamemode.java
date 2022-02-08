@@ -56,12 +56,12 @@ public class CmdGamemode implements TabExecutor {
         if (args.length == 0) {
             sender.sendMessage(usage(sender));
             return true;
-        } else if (SPECTATOR.equalsIgnoreCase(args[0])) {
+        } else if (SPECTATOR.equalsIgnoreCase(args[0]) || "3".equalsIgnoreCase(args[0])) {
             if (target.getGameMode() == GameMode.SPECTATOR)
                 return true;
             target.setGameMode(GameMode.SPECTATOR);
             gamemode = new TranslatableComponent("gameMode.spectator");
-        } else if (SURVIVAL.equalsIgnoreCase(args[0])) {
+        } else if (SURVIVAL.equalsIgnoreCase(args[0]) || "0".equalsIgnoreCase(args[0])) {
             if (target.getGameMode() == GameMode.SURVIVAL)
                 return true;
             target.setGameMode(GameMode.SURVIVAL);

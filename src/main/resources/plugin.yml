@@ -3,9 +3,9 @@ main: sh.chuu.port.mc.portchuu.PortChuu
 version: @version@
 description: Port Chuu Minecraft Server Plugin
 api-version: 1.16
-author: Simon Chuu
+author: chuu_shi
 website: https://port.chuu.sh
-softdepend: [LuckPerms, ProtocolLib, DiscordSRV, EssentialsX]
+softdepend: [LuckPerms, ProtocolLib, DiscordSRV]
 
 commands:
   portchuu:
@@ -20,10 +20,10 @@ commands:
     description: /gamemode, but only for survival and spectator modes
     usage: /gamemode <survival|spectator>
     permission: portchuu.command.gamemode
-  graylist:
-    aliases: [apply, greylist]
+  greylist:
+    aliases: [apply]
     description: Check the graylist status
-    usage: /graylist [player]
+    usage: /greylist [player]
     permission: portchuu.command.graylist
   info:
     aliases: [rules, links, map]
@@ -34,11 +34,6 @@ commands:
     usage: /kill
     description: /kill, but only self
     permission: portchuu.command.kill
-  nickname:
-    aliases: [nick]
-    description: Set your nickname
-    usage: /nickname <set <nickname>|clear|setother <player> <nickname>|clearother <player>|list>
-    permission: portchuu.command.nickname
   ping:
     description: Get the ping of a player
     usage: /ping [player]
@@ -82,12 +77,12 @@ permissions:
     children:
       - portchuu.command.gamemode
 
-  portchuu.command.graylist:
+  portchuu.command.greylist:
     default: true
-  portchuu.command.graylist.add:
+  portchuu.command.greylist.add:
     default: op
     children:
-      - portchuu.command.graylist
+      - portchuu.command.greylist
 
   portchuu.command.info:
     default: true
@@ -95,51 +90,10 @@ permissions:
   portchuu.command.kill:
     default: true
 
-  portchuu.command.nickname:
-    default: op
-  portchuu.command.nickname.color:
-    default: op
-  portchuu.command.nickname.color.multiple:
-    description: Allows usage of multiple colors in name (including full hexadecimal colors)
-    default: op
-    children:
-      - portchuu.command.nickname.color
-  portchuu.command.nickname.magic:
-    default: op
-  portchuu.command.nickname.bold:
-    default: op
-  portchuu.command.nickname.italic:
-    default: op
-  portchuu.command.nickname.strikethrough:
-    default: op
-  portchuu.command.nickname.underline:
-    default: op
-  portchuu.command.nickname.allstyle:
-    default: op
-    children:
-      - portchuu.command.nickname.color.multiple
-      - portchuu.command.nickname.magic
-      - portchuu.command.nickname.bold
-      - portchuu.command.nickname.italic
-      - portchuu.command.nickname.strikethrough
-      - portchuu.command.nickname.underline
-  portchuu.command.nickname.list:
-    default: op
-    children:
-      - portchuu.command.nickname
-  portchuu.command.nickname.other:
-    default: op
-    children:
-      - portchuu.command.nickname
-  portchuu.command.nickname.self:
-    default: op
-    children:
-      - portchuu.command.nickname
-
   portchuu.command.ping:
     default: true
   portchuu.command.ping.other:
-    default: op
+    default: true
     children:
       - portchuu.command.ping
 
