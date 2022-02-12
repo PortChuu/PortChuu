@@ -1,19 +1,22 @@
 package sh.chuu.port.mc.portchuu.modules;
 
 import github.scarsz.discordsrv.DiscordSRV;
+import github.scarsz.discordsrv.api.ListenerPriority;
 import github.scarsz.discordsrv.api.Subscribe;
 import github.scarsz.discordsrv.api.events.DiscordGuildMessagePostProcessEvent;
+import github.scarsz.discordsrv.api.events.DiscordGuildMessagePreBroadcastEvent;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import sh.chuu.port.mc.portchuu.TextTemplates;
+import github.scarsz.discordsrv.dependencies.kyori.adventure.text.Component;
+import github.scarsz.discordsrv.dependencies.kyori.adventure.text.TextComponent;
+import github.scarsz.discordsrv.dependencies.kyori.adventure.text.event.ClickEvent;
+import github.scarsz.discordsrv.dependencies.kyori.adventure.text.event.HoverEvent;
+import github.scarsz.discordsrv.dependencies.kyori.adventure.text.format.TextColor;
+import github.scarsz.discordsrv.dependencies.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DiscordSRVHook {
@@ -25,23 +28,34 @@ public class DiscordSRVHook {
     }
 
     @Subscribe
-    public void chatEvent(DiscordGuildMessagePostProcessEvent ev) {
+    public void chatProcessEvent(DiscordGuildMessagePostProcessEvent ev) {
         Member u = ev.getMember();
-        Color c = u.getColor();
-        String color = c == null ? "" : ChatColor.of(c).toString();
-        BaseComponent user = TextTemplates.createDiscordTooltip(
-                color + u.getEffectiveName(),
-                u.getUser().getName() + "#" + u.getUser().getDiscriminator(),
-                u.getId(),
-                u.getUser().isBot());
-        BaseComponent[] msg = new ComponentBuilder("|").color(ChatColor.of("#5865F2")).bold(true).append("Discord").bold(false).append(" ").reset()
-                .append(user).append("\u300B ").color(ChatColor.GRAY).append(ev.getMessage().getContentRaw()).reset().create();
+        Color uColor = u.getColor();
+        //BaseComponent[] msg = new ComponentBuilder("|").color(ChatColor.of("#5865F2")).bold(true).append("Discord").bold(false).append(" ").reset()
+        //        .append(user).append("\u300B ").color(ChatColor.GRAY).append(ev.getMessage().getContentRaw()).reset().create();
 
-        Bukkit.getConsoleSender().sendMessage(msg);
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            //noinspection deprecation
-            p.sendMessage(ChatMessageType.CHAT, msg);
-        }
-        ev.setCancelled(true);
+        String hoverText = u.getUser().getName() + "#" + u.getUser().getDiscriminator() + "\n"
+                + "discord:" + (u.getUser().isBot() ? "bot" : "user") + "\n"
+                + u.getId();
+
+        // 0: nothing; 1: |, 2: Discord; 3: Discord Username; 4: >> ; 5: Message (extras);
+        List<Component> msgList = new ArrayList<>(ev.getMinecraftMessage().children());
+        Component username = (uColor == null ? msgList.get(3) : msgList.get(3).color(TextColor.color(uColor.getRGB())))
+                .hoverEvent(HoverEvent.showText(Component.text(hoverText)))
+                .clickEvent(ClickEvent.suggestCommand("<@" + u.getId() + ">"));
+        msgList.set(3, username);
+
+        TextComponent newMessage = Component.empty().children(msgList);
+        ev.setMinecraftMessage(newMessage);
+    }
+
+    @Subscribe (priority = ListenerPriority.HIGHEST)
+    public void chatBroadcastEvent(DiscordGuildMessagePreBroadcastEvent ev) {
+        net.kyori.adventure.text.Component send = net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().deserialize(GsonComponentSerializer.gson().serialize(ev.getMessage()));
+
+        ev.getRecipients().forEach((rec) -> {
+            rec.sendMessage(send);
+        });
+        ev.getRecipients().clear();
     }
 }
