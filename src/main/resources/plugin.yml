@@ -46,11 +46,6 @@ commands:
     description: Get the last logout of a player
     usage: /seen <online player>
     permission: portchuu.command.seen
-  teleport:
-    aliases: [tp]
-    description: /teleport, but with different dimensions
-    usage: /teleport [entity] <entity|location>
-    permission: portchuu.command.teleport
   tps:
     aliases: [ram]
     description: Outputs TPS (and RAM usage)
@@ -102,13 +97,6 @@ permissions:
 
   portchuu.command.seen:
     default: true
-
-  portchuu.command.teleport:
-    default: op
-  portchuu.command.teleport.other:
-    default: op
-    children:
-      - portchuu.command.teleport
 
   portchuu.command.tps:
     default: op

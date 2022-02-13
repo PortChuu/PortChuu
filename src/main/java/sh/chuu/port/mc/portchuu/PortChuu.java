@@ -89,8 +89,6 @@ public class PortChuu extends JavaPlugin {
         cmdReport.setExecutor(new CmdReport());
         PluginCommand cmdSeen = getCommand("seen");
         cmdSeen.setExecutor(new CmdSeen());
-        PluginCommand cmdTeleport = getCommand("teleport");
-        cmdTeleport.setExecutor(new CmdTeleport());
         PluginCommand cmdTps = getCommand("tps");
         cmdTps.setExecutor(new CmdTps());
 
