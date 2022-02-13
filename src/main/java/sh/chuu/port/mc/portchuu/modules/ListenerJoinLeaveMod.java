@@ -7,6 +7,10 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
@@ -49,7 +53,7 @@ public class ListenerJoinLeaveMod implements Listener {
         if (p.hasPlayedBefore() || lastLogin != null) {
             long diff = System.currentTimeMillis() - lastLogin;
             if (diff > 10000)
-                p.sendMessage(welcomeBack(p.getLastLogin(), diff/1000, TextTemplates.locale((p.getLocale()))));
+                p.sendMessage(welcomeBack(p.getLastLogin(), diff/1000, p.locale()));
         } else {
             p.sendMessage(newPlayer(name));
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -105,25 +109,17 @@ public class ListenerJoinLeaveMod implements Listener {
                 .create();
     }
 
-    private BaseComponent[] welcomeBack(long lastLoginTime, long diff, Locale locale) {
-        return new ComponentBuilder("=====")
-                .color(ChatColor.DARK_GRAY)
-                .bold(true)
-                .append(" Welcome back to the ")
-                .color(ChatColor.WHITE)
-                .append("Port Chuu")
-                .color(ChatColor.AQUA)
-                .event(new ClickEvent(ClickEvent.Action.OPEN_URL, WEBSITE_URL))
-                .append("! ", ComponentBuilder.FormatRetention.FORMATTING)
-                .color(ChatColor.WHITE)
-                .append("=====\n")
-                .color(ChatColor.DARK_GRAY)
-                .append(" Your last login was ", ComponentBuilder.FormatRetention.NONE)
-                .color(ChatColor.GRAY)
-                .append(TextTemplates.timeText(lastLoginTime, (int) diff, true, locale, null, ChatColor.WHITE))
-                .append(".")
-                .color(ChatColor.GRAY)
-                .create();
+    private Component welcomeBack(long lastLoginTime, long diff, Locale locale) {
+        return Component.empty()
+                .append(Component.text("=====", NamedTextColor.DARK_GRAY, TextDecoration.BOLD))
+                .append(Component.text(" Welcome back to the ", NamedTextColor.WHITE))
+                .append(Component.text("Port Chuu! ", TextColor.color(0xD3F6FF))
+                        .clickEvent(net.kyori.adventure.text.event.ClickEvent.clickEvent(net.kyori.adventure.text.event.ClickEvent.Action.OPEN_URL, WEBSITE_URL))
+                )
+                .append(Component.text("=====\n", NamedTextColor.DARK_GRAY))
+                .append(Component.text(" Your last login was ", NamedTextColor.GRAY))
+                .append(TextTemplates.timeText(lastLoginTime, (int) diff, true, locale, null, NamedTextColor.WHITE))
+                .append(Component.text(".", NamedTextColor.GRAY));
     }
 
     private void notifyDisabledChat(Player p) {

@@ -1,10 +1,8 @@
 package sh.chuu.port.mc.portchuu.commands;
 
 import com.google.common.collect.ImmutableList;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -23,7 +21,7 @@ public class CmdFirstSeen implements TabExecutor {
     private final PortChuu plugin = PortChuu.getInstance();
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         Player pl;
         if (args.length == 0) {
             if (sender instanceof Player) {
@@ -43,25 +41,23 @@ public class CmdFirstSeen implements TabExecutor {
             //noinspection deprecation
             target = pl == null ? Bukkit.getOfflinePlayer(args[0]) : pl;
             long time = target.getFirstPlayed();
+            if (time == 0) {
+                sender.sendMessage(TextTemplates.unknownPlayer());
+                return;
+            }
             int diff = (int)((System.currentTimeMillis() - time) / 1000);
-            Locale locale = sender instanceof Player ? TextTemplates.locale(((Player) sender).getLocale()) : null;
+            Locale locale = sender instanceof Player ? ((Player) sender).locale() : null;
 
-            sender.sendMessage(new ComponentBuilder(target.getName())
-                    .color(ChatColor.WHITE)
-                    .append(" joined the server ")
-                    .color(ChatColor.GRAY)
-                    .append(TextTemplates.timeText(time, diff, true, locale, null, ChatColor.WHITE))
-                    .create()
+            sender.sendMessage(Component.empty().append(Component.text(target.getName()).color(NamedTextColor.WHITE))
+                    .append(Component.text(" joined the server ").color(NamedTextColor.GRAY))
+                    .append(TextTemplates.timeText(time, diff, true, locale, null, NamedTextColor.WHITE))
             );
         });
         return true;
     }
 
-    private BaseComponent usage() {
-        String msg = "Usage: /firstseen <player>";
-        BaseComponent ret = new TextComponent(msg);
-        ret.setColor(ChatColor.RED);
-        return ret;
+    private Component usage() {
+        return Component.text("Usage: /firstseen <player>", NamedTextColor.RED);
     }
 
     @Override

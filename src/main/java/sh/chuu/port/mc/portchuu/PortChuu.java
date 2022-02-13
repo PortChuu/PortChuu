@@ -122,12 +122,9 @@ public class PortChuu extends JavaPlugin {
         return ImmutableList.of();
     }
 
-    public boolean sendToDiscord(String msg) {
+    public void sendToDiscord(String msg) {
         if (isDiscordSRVLoaded()) {
             discordSRVHook.sendChat(msg);
-            return true;
         }
-        return false;
     }
-
 }

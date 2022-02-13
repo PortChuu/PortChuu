@@ -1,7 +1,9 @@
 package sh.chuu.port.mc.portchuu;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent.Builder;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
@@ -77,7 +79,7 @@ public interface TextTemplates {
             }
         }
         if (sb.length() != 0)
-            cb.append(TextComponent.fromLegacyText(sb.toString()), ComponentBuilder.FormatRetention.NONE);
+            cb.append(net.md_5.bungee.api.chat.TextComponent.fromLegacyText(sb.toString()), ComponentBuilder.FormatRetention.NONE);
     }
 
     static void injectURLTruncatedSingle(ComponentBuilder cb, String url, ChatColor color) {
@@ -144,80 +146,64 @@ public interface TextTemplates {
         return new Locale(p[0], p[1], p[2]);
     }
 
-    static BaseComponent timeText(long time, int diff, boolean past, Locale locale, TimeZone timeZone, ChatColor focusColor) {
+    static Component timeText(long time, int diff, boolean past, Locale locale, TimeZone timeZone, TextColor focusColor) {
         TimeZone zone = timeZone == null ? TimeZone.getDefault() : timeZone;
         Locale loc = locale == null ? Locale.getDefault() : locale;
-        BaseComponent ret = new TextComponent();
-        DateFormat d;
+        Builder ret = Component.empty().toBuilder();
         if (diff < 60) {
-            BaseComponent sec = new TextComponent(diff + " second" + (diff == 1 ? "" : "s"));
-            sec.setColor(focusColor);
             if (!past) {
-                ret.addExtra("in ");
+                ret.append(Component.text("in "));
             }
 
-            ret.addExtra(sec);
+            ret.append(Component.text(diff + " second" + (diff == 1 ? "" : "s"), focusColor));
+
             if (past) {
-                ret.addExtra(" ago");
+                ret.append(Component.text(" ago"));
             }
         } else {
-            TextComponent day;
             int di;
             if (diff < 3600) {
+                if (!past) ret.append(Component.text("in "));
+
                 di = diff / 60;
-                day = new TextComponent(di + " minute" + (di == 1 ? "" : "s"));
-                day.setColor(focusColor);
-                if (!past) {
-                    ret.addExtra("in ");
-                }
+                ret.append(Component.text(di + " minute" + (di == 1 ? "" : "s"), focusColor));
 
-                ret.addExtra(day);
-                if (past) {
-                    ret.addExtra(" ago");
-                }
+                if (past) ret.append(Component.text(" ago"));
             } else if (diff < 86400) {
-                di = diff / 3600;
-                day = new TextComponent(di + " hour" + (di == 1 ? "" : "s"));
-                day.setColor(focusColor);
-                if (!past) {
-                    ret.addExtra("in ");
-                }
+                if (!past) ret.append(Component.text("in "));
 
-                ret.addExtra(day);
-                if (past) {
-                    ret.addExtra(" ago");
-                }
+                di = diff / 3600;
+                ret.append(Component.text(di + " hour" + (di == 1 ? "" : "s"), focusColor));
+
+                if (past) ret.append(Component.text(" ago"));
             } else if (diff < 604800) {
+                if (!past) ret.append(Component.text("in "));
+
                 di = diff / 86400;
                 int h = diff / 3600 % 24;
-                day = new TextComponent(di + " day" + (di == 1 ? "" : "s"));
-                day.setColor(focusColor);
-                if (!past) {
-                    ret.addExtra("in ");
-                }
 
-                ret.addExtra(day);
-                ret.addExtra(" and " + h + " hour" + (h == 1 ? "" : "s"));
-                if (past) {
-                    ret.addExtra(" ago");
-                }
+                ret.append(Component.text(di + " day" + (di == 1 ? "" : "s"), focusColor));
+                ret.append(Component.text(" and " + h + " hour" + (h == 1 ? "" : "s")));
+
+                if (past) ret.append(Component.text(" ago"));
             } else {
-                ret.addExtra("on ");
-                d = DateFormat.getDateInstance(1, loc);
+                ret.append(Component.text("in "));
+                DateFormat d = DateFormat.getDateInstance(1, loc);
                 d.setTimeZone(zone);
-                day = new TextComponent(d.format(time));
-                day.setColor(focusColor);
-                ret.addExtra(day);
+
+                ret.append(Component.text(d.format(time), focusColor));
+
                 DateFormat t = DateFormat.getTimeInstance(0, loc);
                 t.setTimeZone(zone);
-                ret.addExtra(" at " + t.format(time));
+                ret.append(Component.text(" at " + t.format(time)));
             }
         }
 
-        d = DateFormat.getDateTimeInstance(0, 0, loc);
+        DateFormat d = DateFormat.getDateTimeInstance(0, 0, loc);
         d.setTimeZone(zone);
-        ret.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT, (new ComponentBuilder(d.format(time))).create()));
-        return ret;
+
+        ret.hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(Component.text(d.format(time))));
+        return ret.build();
     }
 
     static ChatColor colorTPS(double tps) {
