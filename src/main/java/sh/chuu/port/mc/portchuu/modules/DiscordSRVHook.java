@@ -13,6 +13,7 @@ import github.scarsz.discordsrv.dependencies.kyori.adventure.text.event.ClickEve
 import github.scarsz.discordsrv.dependencies.kyori.adventure.text.event.HoverEvent;
 import github.scarsz.discordsrv.dependencies.kyori.adventure.text.format.TextColor;
 import github.scarsz.discordsrv.dependencies.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.audience.MessageType;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -27,6 +28,12 @@ public class DiscordSRVHook {
             chan.sendMessage(msg).complete();
     }
 
+    public String getMemberName(long id) {
+        Member u = DiscordSRV.getPlugin().getMainGuild().getMemberById(id);
+        if (u == null) return null;
+        return u.getEffectiveName();
+    }
+
     @Subscribe
     public void chatProcessEvent(DiscordGuildMessagePostProcessEvent ev) {
         Member u = ev.getMember();
@@ -35,8 +42,10 @@ public class DiscordSRVHook {
         //        .append(user).append("\u300B ").color(ChatColor.GRAY).append(ev.getMessage().getContentRaw()).reset().create();
 
         String hoverText = u.getUser().getName() + "#" + u.getUser().getDiscriminator() + "\n"
-                + "discord:" + (u.getUser().isBot() ? "bot" : "user") + "\n"
+                + "Type: " + (u.getUser().isBot() ? "Bot" : "Member") + "\n"
                 + u.getId();
+
+
 
         // 0: nothing; 1: |, 2: Discord; 3: Discord Username; 4: >> ; 5: Message (extras);
         List<Component> msgList = new ArrayList<>(ev.getMinecraftMessage().children());
@@ -54,7 +63,7 @@ public class DiscordSRVHook {
         net.kyori.adventure.text.Component send = net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().deserialize(GsonComponentSerializer.gson().serialize(ev.getMessage()));
 
         ev.getRecipients().forEach((rec) -> {
-            rec.sendMessage(send);
+            rec.sendMessage(send, MessageType.CHAT);
         });
         ev.getRecipients().clear();
     }

@@ -30,6 +30,9 @@ public class PortChuu extends JavaPlugin {
     public PermissionsModule getPermissionsModule() {
         return permissionsModule;
     }
+    public DiscordSRVHook getDiscordSRVHook() {
+        return discordSRVHook;
+    }
 
     public LuckPerms getLpAPI() {
         if (lpAPI != null)
@@ -67,6 +70,8 @@ public class PortChuu extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new ListenerBuildPermission(), this);
         getServer().getPluginManager().registerEvents(new ListenerJoinLeaveMod(), this);
+        if (getConfig().getBoolean("chat-tooltip.enable"))
+            getServer().getPluginManager().registerEvents(new ChatTooltip(), this);
 
         PluginCommand cmdFirstSeen = getCommand("firstseen");
         cmdFirstSeen.setExecutor(new CmdFirstSeen());
