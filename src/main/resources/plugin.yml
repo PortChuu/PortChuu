@@ -5,7 +5,7 @@ description: Port Chuu Minecraft Server Plugin
 api-version: 1.16
 author: chuu_shi
 website: https://port.chuu.sh
-softdepend: [LuckPerms, ProtocolLib, DiscordSRV]
+softdepend: [LuckPerms, ProtocolLib, DiscordSRV, MultiChat]
 
 commands:
   portchuu:
