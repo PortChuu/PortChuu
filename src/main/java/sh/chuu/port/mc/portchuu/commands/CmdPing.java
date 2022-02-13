@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import sh.chuu.port.mc.portchuu.TextTemplates;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class CmdPing implements TabExecutor {
     private static final String OTHER_PERM = "portchuu.command.ping.other";
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         Player target;
         if (args.length != 0 && sender.hasPermission(OTHER_PERM)) {
             target = Bukkit.getPlayer(args[0]);
@@ -40,7 +41,7 @@ public class CmdPing implements TabExecutor {
             a.setText("Pong! Your ping: ");
         }
         else {
-            TextComponent b = new TextComponent(target.getName());
+            TextComponent b = new TextComponent(target.getDisplayName()); // Convert to component
             b.setColor(ChatColor.WHITE);
             a.setText("Pong! ");
             a.addExtra(b);

@@ -1,6 +1,7 @@
 package sh.chuu.port.mc.portchuu.commands;
 
 import com.google.common.collect.ImmutableList;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -12,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import sh.chuu.port.mc.portchuu.TextTemplates;
 
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ public class CmdGamemode implements TabExecutor {
         }
 
 
-        BaseComponent gamemode;
+        Component gamemode;
         if (args.length == 0) {
             sender.sendMessage(usage(sender));
             return true;
@@ -60,22 +62,21 @@ public class CmdGamemode implements TabExecutor {
             if (target.getGameMode() == GameMode.SPECTATOR)
                 return true;
             target.setGameMode(GameMode.SPECTATOR);
-            gamemode = new TranslatableComponent("gameMode.spectator");
+            gamemode = Component.translatable("gameMode.spectator");
         } else if (SURVIVAL.equalsIgnoreCase(args[0]) || "0".equalsIgnoreCase(args[0])) {
             if (target.getGameMode() == GameMode.SURVIVAL)
                 return true;
             target.setGameMode(GameMode.SURVIVAL);
-            gamemode = new TranslatableComponent("gameMode.survival");
+            gamemode = Component.translatable("gameMode.survival");
         } else {
             sender.sendMessage(usage(sender));
             return true;
         }
-        BaseComponent msg;
-        if (sender == target) {
-            msg = new TranslatableComponent("commands.gamemode.success.self", gamemode);
-        } else {
-            msg = new TranslatableComponent("commands.gamemode.success.other", sender.getName(), gamemode);
-        }
+        Component msg;
+        if (sender == target)
+            msg = Component.translatable("commands.gamemode.success.self", gamemode);
+        else
+            msg = Component.translatable("commands.gamemode.success.other", sender.name(), gamemode);
         TextTemplates.adminBroadcast(msg, sender);
         return true;
     }
@@ -97,7 +98,7 @@ public class CmdGamemode implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         if (args.length == 1) {
             List<String> list = new ArrayList<>();
             if (SPECTATOR.startsWith(args[0].toLowerCase())) list.add(SPECTATOR);

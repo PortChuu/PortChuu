@@ -1,5 +1,8 @@
 package sh.chuu.port.mc.portchuu;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
@@ -111,19 +114,14 @@ public interface TextTemplates {
 
     }
 
-    static BaseComponent unknownPlayer() {
-        BaseComponent ret = new TranslatableComponent("argument.player.unknown");
-        ret.setColor(ChatColor.RED);
-        return ret;
+    static Component unknownPlayer() {
+        return Component.translatable("argument.player.unknown", NamedTextColor.RED);
     }
 
-    static void adminBroadcast(BaseComponent msg, CommandSender sender) {
+    static void adminBroadcast(Component msg, CommandSender sender) {
         sender.sendMessage(msg);
-        BaseComponent send = new TranslatableComponent("chat.type.admin", sender.getName(), msg);
-        send.setColor(ChatColor.GRAY);
+        Component send = Component.translatable("chat.type.admin", NamedTextColor.GRAY, TextDecoration.ITALIC);
         if (Bukkit.getConsoleSender() != sender) Bukkit.getConsoleSender().sendMessage(send);
-
-        send.setItalic(true);
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.hasPermission("minecraft.admin.command_feedback") && p != sender)
                 p.sendMessage(send);

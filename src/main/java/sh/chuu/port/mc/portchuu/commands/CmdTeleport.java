@@ -1,10 +1,8 @@
 package sh.chuu.port.mc.portchuu.commands;
 
 import com.google.common.collect.ImmutableList;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.TranslatableComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -13,7 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import sh.chuu.port.mc.portchuu.PortChuu;
+import org.jetbrains.annotations.NotNull;
 import sh.chuu.port.mc.portchuu.TextTemplates;
 
 import java.util.ArrayList;
@@ -24,8 +22,8 @@ public class CmdTeleport implements TabExecutor {
     private static final String OTHER_PERM = "portchuu.command.teleport.other";
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Entity)) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        if (!(sender instanceof Entity en)) {
             sender.sendMessage("You must be an entity");
             return true;
         }
@@ -36,7 +34,6 @@ public class CmdTeleport implements TabExecutor {
         }
 
         // heccin this is a mess so Imma start commenting here
-        Entity en = (Entity) sender;
         Entity origin, destination;
         Location loc;
 
@@ -131,8 +128,7 @@ public class CmdTeleport implements TabExecutor {
             } else {
                 w = Bukkit.getWorld(aw);
                 if (w == null){
-                    BaseComponent unknownWorld = new TranslatableComponent("Unknown world '%s'", aw);
-                    unknownWorld.setColor(ChatColor.RED);
+                    Component unknownWorld = Component.translatable("argument.dimension.invalid", NamedTextColor.RED, Component.text(aw));
                     sender.sendMessage(unknownWorld);
                     caught = true;
                 }
@@ -144,30 +140,29 @@ public class CmdTeleport implements TabExecutor {
         }
 
         if (!origin.teleport(loc)) {
-            BaseComponent il = new TranslatableComponent("commands.teleport.invalidPosition");
-            il.setColor(ChatColor.RED);
-            sender.sendMessage(il);
+            sender.sendMessage(Component.text("commands.teleport.invalidPosition", NamedTextColor.RED));
             return true;
         }
 
-        BaseComponent msg;
+        Component msg;
         if (destination == null)
-            msg = new TranslatableComponent("commands.teleport.success.location.single", origin.getName(), loc.getBlockX(), loc.getY(), loc.getZ());
+            msg = Component.translatable("commands.teleport.success.location.single",
+                    origin.name(),
+                    Component.text(loc.getBlockX()),
+                    Component.text(loc.getY()),
+                    Component.text(loc.getZ()));
         else
-            msg = new TranslatableComponent("commands.teleport.success.entity.single", origin.getName(), destination.getName());
+            msg = Component.translatable("commands.teleport.success.entity.single", origin.name(), destination.name());
         TextTemplates.adminBroadcast(msg, sender);
 
         return true;
     }
 
-    private BaseComponent usage(CommandSender sender) {
-        BaseComponent ret;
+    private Component usage(CommandSender sender) {
         if (sender.hasPermission(OTHER_PERM))
-            ret = new TextComponent("Usage: /teleport [entity to move] <entity|location [world]>");
+            return Component.text("Usage: /teleport [entity to move] <entity|location [world]>", NamedTextColor.RED);
         else
-            ret = new TextComponent("Usage: /teleport <entity|location [world]>");
-        ret.setColor(ChatColor.RED);
-        return ret;
+            return Component.text("Usage: /teleport <entity|location [world]>", NamedTextColor.RED);
     }
 
     private double parseRelDouble(String tild, double curr) throws NumberFormatException {
@@ -195,20 +190,16 @@ public class CmdTeleport implements TabExecutor {
         return ret;
     }
 
-    private BaseComponent invalidDouble(String d) {
-        BaseComponent ret = new TranslatableComponent("parsing.double.invalid", d);
-        ret.setColor(ChatColor.RED);
-        return ret;
+    private Component invalidDouble(String d) {
+        return Component.translatable("parsing.double.invalid", NamedTextColor.RED, Component.text(d));
     }
 
-    private BaseComponent invalidEntity() {
-        BaseComponent ret = new TranslatableComponent("argument.entity.invalid");
-        ret.setColor(ChatColor.RED);
-        return ret;
+    private Component invalidEntity() {
+        return Component.translatable("argument.entity.invalid", NamedTextColor.RED);
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         if (!(sender instanceof Entity)) {
             return ImmutableList.of();
         }
