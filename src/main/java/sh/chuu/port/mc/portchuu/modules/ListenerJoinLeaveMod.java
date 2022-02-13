@@ -112,11 +112,11 @@ public class ListenerJoinLeaveMod implements Listener {
     private Component welcomeBack(long lastLoginTime, long diff, Locale locale) {
         return Component.empty()
                 .append(Component.text("=====", NamedTextColor.DARK_GRAY, TextDecoration.BOLD))
-                .append(Component.text(" Welcome back to the ", NamedTextColor.WHITE))
-                .append(Component.text("Port Chuu! ", TextColor.color(0xD3F6FF))
+                .append(Component.text(" Welcome back to the ", NamedTextColor.WHITE, TextDecoration.BOLD))
+                .append(Component.text("Port Chuu! ", TextColor.color(0xD3F6FF), TextDecoration.BOLD)
                         .clickEvent(net.kyori.adventure.text.event.ClickEvent.clickEvent(net.kyori.adventure.text.event.ClickEvent.Action.OPEN_URL, WEBSITE_URL))
                 )
-                .append(Component.text("=====\n", NamedTextColor.DARK_GRAY))
+                .append(Component.text("=====\n", NamedTextColor.DARK_GRAY, TextDecoration.BOLD))
                 .append(Component.text(" Your last login was ", NamedTextColor.GRAY))
                 .append(TextTemplates.timeText(lastLoginTime, (int) diff, true, locale, null, NamedTextColor.WHITE))
                 .append(Component.text(".", NamedTextColor.GRAY));
