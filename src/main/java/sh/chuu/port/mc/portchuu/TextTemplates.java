@@ -26,7 +26,7 @@ public interface TextTemplates {
 
     static BaseComponent createPlayerTooltipLegacy(String display, String name, String uuid) {
         BaseComponent ret = createComponent(display);
-        injectPlayerTooltip(ret, name, "minecraft:player", uuid, "/tell " + name + " ");
+        injectPlayerTooltip(ret, name, "Player", uuid, "/tell " + name + " ");
         return ret;
     }
 
