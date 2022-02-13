@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class ListenerJoinLeaveMod implements Listener {
-    private static final String GRAYLIST_URL = "https://port.chuu.sh/graylist";
+    private static final String GREYLIST_URL = "https://port.chuu.sh/greylist";
     private static final String WEBSITE_URL = "https://port.chuu.sh/";
     private final PortChuu plugin = PortChuu.getInstance();
     private final PermissionsModule permModule = plugin.getPermissionsModule();
@@ -101,7 +101,7 @@ public class ListenerJoinLeaveMod implements Listener {
                 .color(ChatColor.WHITE)
                 .append("Apply for the graylist here!")
                 .color(ChatColor.AQUA)
-                .event(new ClickEvent(ClickEvent.Action.OPEN_URL, GRAYLIST_URL))
+                .event(new ClickEvent(ClickEvent.Action.OPEN_URL, GREYLIST_URL))
                 .create();
     }
 

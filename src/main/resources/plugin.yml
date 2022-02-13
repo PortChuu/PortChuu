@@ -22,9 +22,9 @@ commands:
     permission: portchuu.command.gamemode
   greylist:
     aliases: [apply]
-    description: Check the graylist status
+    description: Check the greylist status
     usage: /greylist [player]
-    permission: portchuu.command.graylist
+    permission: portchuu.command.greylist
   info:
     aliases: [rules, links, map]
     description: Shows the server info as a book
