@@ -41,16 +41,16 @@ public class DiscordSRVHook {
         //BaseComponent[] msg = new ComponentBuilder("|").color(ChatColor.of("#5865F2")).bold(true).append("Discord").bold(false).append(" ").reset()
         //        .append(user).append("\u300B ").color(ChatColor.GRAY).append(ev.getMessage().getContentRaw()).reset().create();
 
-        String hoverText = u.getUser().getName() + "#" + u.getUser().getDiscriminator() + "\n"
-                + "Type: " + (u.getUser().isBot() ? "Bot" : "Member") + "\n"
-                + u.getId();
-
-
+        String senderType = u.getUser().isBot() ? "Bot" : "Member";
 
         // 0: nothing; 1: |, 2: Discord; 3: Discord Username; 4: >> ; 5: Message (extras);
         List<Component> msgList = new ArrayList<>(ev.getMinecraftMessage().children());
         Component username = (uColor == null ? msgList.get(3) : msgList.get(3).color(TextColor.color(uColor.getRGB())))
-                .hoverEvent(HoverEvent.showText(Component.text(hoverText)))
+                .hoverEvent(HoverEvent.showText(Component
+                        .text(u.getUser().getName() + "#" + u.getUser().getDiscriminator() + "\n")
+                        .append(Component.translatable("gui.entity_tooltip.type", Component.text(senderType)))
+                        .append( Component.text("\n" + u.getId()))
+                ))
                 .clickEvent(ClickEvent.suggestCommand("<@" + u.getId() + ">"));
         msgList.set(3, username);
 

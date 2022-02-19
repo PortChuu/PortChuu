@@ -41,7 +41,7 @@ public class CmdPing implements TabExecutor {
             a.setText("Pong! Your ping: ");
         }
         else {
-            TextComponent b = new TextComponent(target.getDisplayName()); // Convert to component
+            TextComponent b = new TextComponent(target.getDisplayName()); // TODO Convert to component
             b.setColor(ChatColor.WHITE);
             a.setText("Pong! ");
             a.addExtra(b);

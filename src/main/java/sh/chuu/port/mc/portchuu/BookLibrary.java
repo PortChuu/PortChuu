@@ -33,9 +33,8 @@ public class BookLibrary {
                 .color(ChatColor.DARK_AQUA);
         addLink(page2, "Website", "https://port.chuu.sh/");
         addLink(page2, "Map", "https://port.chuu.sh/map/");
-        addLink(page2, "Discord", "https://discord.gg/ZUv2gwM");
+        addLink(page2, "Discord", "https://discord.gg/hYcphGC9p2");
         addLink(page2, "Subreddit", "https://reddit.com/r/PortChuu/");
-        addLink(page2, "Secret site?", "https://port.chuu.sh/construct.html");
         page2.italic(true)
                 .append("\n");
         footer(page2, 2);
@@ -59,9 +58,9 @@ public class BookLibrary {
                 .bold(true)
                 .append("===============\n")
                 .color(ChatColor.DARK_AQUA);
-        addRule(page4, 6, "Don't cheat on the server.");
-        addRule(page4, 7, "Don't steal or grief anybody.");
-        addRule(page4, 8, "About building...");
+        addRule(page4, "M1", "Don't cheat on the server.");
+        addRule(page4, "M2", "Don't steal or grief anybody.");
+        addRule(page4, "M3", "About building...");
         addLink(page4, "Visit the rules page for detailed info.", "https://port.chuu.sh/#rules");
         page4.append("\n");
         footer(page4, 4);
@@ -72,7 +71,7 @@ public class BookLibrary {
                 .bold(true)
                 .append("===============\n")
                 .color(ChatColor.DARK_AQUA);
-        page5.append("todo: TELL CHUU TO FINISH THIS AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n", ComponentBuilder.FormatRetention.NONE);
+        page5.append("//TODO: Finish this book, Chuu!\n", ComponentBuilder.FormatRetention.NONE);
         footer(page5, 5);
         book.spigot().addPage(page5.create());
 
@@ -100,7 +99,7 @@ public class BookLibrary {
                 .color(ChatColor.BLUE);
     }
 
-    private static void addRule(ComponentBuilder cb, int number, String rule) {
+    private static void addRule(ComponentBuilder cb, Object number, String rule) {
         cb
                 .append(number + ". ", ComponentBuilder.FormatRetention.NONE)
                 .bold(true)

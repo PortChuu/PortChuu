@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import sh.chuu.port.mc.portchuu.PortChuu;
 import sh.chuu.port.mc.portchuu.TextTemplates;
 import sh.chuu.port.mc.portchuu.modules.PermissionsModule;
@@ -27,7 +28,7 @@ public class CmdGreylist implements TabExecutor {
     private final PermissionsModule module = PortChuu.getInstance().getPermissionsModule();
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender.hasPermission(ADD_PERM)) {
             if (args.length < 2) {
                 sender.sendMessage(usageAdd());
